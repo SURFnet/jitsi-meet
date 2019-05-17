@@ -95,7 +95,7 @@ $sidebarWidth: 375px;
  * Misc.
  */
 $borderRadius: 4px;
-$defaultWatermarkLink: '../images/watermark.png';
+$defaultWatermarkLink: '../images/SURFmeet-logo-small.png';
 $popoverMenuPadding: 13px;
 $happySoftwareBackground: transparent;
 $desktopAppDragBarHeight: 25px;
@@ -156,14 +156,14 @@ $unsupportedDesktopBrowserTextFontSize: 21px;
  * The size of the default watermark.
  */
 $watermarkWidth: 186px;
-$watermarkHeight: 74px;
+$watermarkHeight: 186px;
 
 /**
  * Welcome page variables.
  */
 $welcomePageDescriptionColor: #fff;
 $welcomePageFontFamily: inherit;
-$welcomePageHeaderBackground: linear-gradient(-90deg, #1251AE 0%, #0074FF 50%, #1251AE 100%);
+$welcomePageHeaderBackground: linear-gradient(-90deg, #ea7600 0%, #ea7600 100%);
 $welcomePageTitleColor: #fff;
 
 /**
