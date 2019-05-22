@@ -96,7 +96,7 @@ $sidebarWidth: 375px;
  * Misc.
  */
 $borderRadius: 4px;
-$defaultWatermarkLink: '../images/SURFmeet-logo-small.png';
+$defaultWatermarkLink: '../images/SURFmeet-logo-small@2x.png';
 $popoverMenuPadding: 13px;
 $happySoftwareBackground: transparent;
 $desktopAppDragBarHeight: 25px;
@@ -156,8 +156,8 @@ $unsupportedDesktopBrowserTextFontSize: 21px;
 /**
  * The size of the default watermark.
  */
-$watermarkWidth: 186px;
-$watermarkHeight: 186px;
+$watermarkWidth: 425px;
+$watermarkHeight: 200px;
 
 /**
  * Welcome page variables.
