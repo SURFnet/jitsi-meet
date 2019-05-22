@@ -27,7 +27,7 @@ var interfaceConfig = {
     SHOW_DEEP_LINKING_IMAGE: false,
     GENERATE_ROOMNAMES_ON_WELCOME_PAGE: true,
     DISPLAY_WELCOME_PAGE_CONTENT: true,
-    APP_NAME: 'Jitsi Meet',
+    APP_NAME: 'SURF Videobellen pilot',
     NATIVE_APP_NAME: 'Jitsi Meet',
     PROVIDER_NAME: 'Jitsi',
     LANG_DETECTION: false, // Allow i18n to detect the system language
