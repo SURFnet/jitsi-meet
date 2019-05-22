@@ -3,7 +3,7 @@
 /**
  * Style variables
  */
-$baseFontFamily: -apple-system, BlinkMacSystemFont, 'open_sanslight', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$baseFontFamily: 'gotham-rounded', -apple-system, BlinkMacSystemFont, 'open_sanslight', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 $hangupColor: #bf2117;
 $hangupFontSize: 2em;
 
@@ -24,6 +24,7 @@ $filmstripToggleButtonWidth: 17px;
 /**
  * Color variables.
  */
+$surfColor: #ea7600;
 $defaultColor: #F1F1F1;
 $defaultSideBarFontColor: #44A5FF;
 $defaultSemiDarkColor: #ACACAC;
@@ -163,7 +164,7 @@ $watermarkHeight: 186px;
  */
 $welcomePageDescriptionColor: #fff;
 $welcomePageFontFamily: inherit;
-$welcomePageHeaderBackground: linear-gradient(-90deg, #ea7600 0%, #ea7600 100%);
+$welcomePageHeaderBackground: linear-gradient(-90deg, $surfColor 0%, $surfColor 100%);
 $welcomePageTitleColor: #fff;
 
 /**
