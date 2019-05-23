@@ -130,10 +130,18 @@ class WelcomePage extends AbstractWelcomePage {
                         <h1 className = 'header-text-title'>
                             { t('welcomepage.title') }
                         </h1>
+                        <p className = 'header-text-subtitle'>
+                            { t('welcomepage.subtitle',
+                                { app: APP_NAME }) }
+                        </p>
                         <p className = 'header-text-description'>
                             { t('welcomepage.appDescription',
                                 { app: APP_NAME }) }
                         </p>
+                        <p
+                            className = 'header-text-about'
+                            // eslint-disable-next-line react/no-danger
+                            dangerouslySetInnerHTML = {{ __html: t('welcomepage.appAbout') }} />
                     </div>
                     <div id = 'enter_room'>
                         <div className = 'enter-room-input-container'>
