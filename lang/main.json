@@ -765,7 +765,7 @@
             "join": "Tap to join",
             "roomname": "Enter room name"
         },
-        "appDescription": "Met deze tool kun je videobellen zonder poespas. Dus géén software downloaden, géén addons, géén licentie, en je gasten hoeven ook niet in te loggen.",
+        "appDescription": "Met deze tool kun je videobellen zonder poespas. Meer dan een browser heb je niet nodig. Dus géén software downloaden, géén addons, géén licentie, en je gasten hoeven ook niet in te loggen.",
         "appAbout": "SURF Videobellen pilot is gebaseerd op JitsiMeet: een 100% open source, volledig encrypte videoconference oplossing. Feedback? We horen het graag via <a href='mailto:meet@surf.nl'>meet@surf.nl</a>.",
         "audioVideoSwitch": {
             "audio": "Voice",
