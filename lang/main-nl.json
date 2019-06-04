@@ -765,8 +765,8 @@
             "join": "Tap to join",
             "roomname": "Enter room name"
         },
-        "appDescription": "With this tool you can make video calls without fuss. All you need is a webbrowser that supports <a href='https://webrtc.org/'>webRTC</a>. So no software download, no addons, no license and your guests do not have to log in.",
-        "appAbout": "SURF Videoconferencing pilot is based on JitsiMeet: a 100% open source, fully encrypted video conference solution. The privacy statement for this pilot can be found <a href='https://edu.nl/83qfg'>here</a>. Feedback? Please let us know via <a href='mailto:meet@surf.nl'>meet@surf.nl</a>.",
+        "appDescription": "Met deze tool kun je videobellen zonder poespas. Meer dan een browser met <a href='https://webrtc.org/'>webRTC ondersteuning</a> heb je niet nodig. Dus géén software downloaden, géén addons, géén licentie, en je gasten hoeven ook niet in te loggen.",
+        "appAbout": "Pilot SURF Videobellen is gebaseerd op JitsiMeet: een 100% open source, volledig encrypte videoconference oplossing. De privacy verklaring voor deze pilot kun je <a href='https://edu.nl/83qfg'>hier</a> vinden. Feedback? We horen het graag via <a href='mailto:meet@surf.nl'>meet@surf.nl</a>.",
         "audioVideoSwitch": {
             "audio": "Voice",
             "video": "Video"
@@ -786,7 +786,7 @@
         "roomnameHint": "Enter the name or URL of the room you want to join. You may make a name up, just let the people you are meeting know it so that they enter the same name.",
         "sendFeedback": "Send feedback",
         "terms": "Terms",
-        "title": "Security, privacy and easy to use.",
-        "subtitle": "Welcome to the SURF Videoconferencing pilot."
+        "title": "Veiligheid, Privacy en Gebruiksgemak.",
+        "subtitle": "Welkom bij de pilot SURF Videobellen."
     }
 }
