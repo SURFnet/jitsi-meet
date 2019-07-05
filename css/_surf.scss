@@ -11,3 +11,8 @@
     font-weight: bold;
     font-style: normal;
 }
+
+#videospace .watermark {
+    width: $watermarkWidth / 3;
+    height: $watermarkHeight / 3;
+}
