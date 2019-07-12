@@ -625,6 +625,16 @@ class Toolbox extends Component<Props, State> {
         this._doOpenFeedback();
     }
 
+    /**
+     * Opens the manual in a new window.
+     *
+     * @private
+     * @returns {void}
+     */
+    _onToolbarOpenManual() {
+        window.open(this.props.t('toolbar.manualURL'), '_blank');
+    }
+
     _onToolbarOpenInvite: () => void;
 
     /**
@@ -991,6 +1001,13 @@ class Toolbox extends Component<Props, State> {
                     key = 'feedback'
                     onClick = { this._onToolbarOpenFeedback }
                     text = { t('toolbar.feedback') } />,
+            <OverflowMenuItem
+                accessibilityLabel =
+                    { t('toolbar.accessibilityLabel.manual') }
+                icon = 'icon-share-doc'
+                key = 'manual'
+                onClick = { this._onToolbarOpenManual }
+                text = { t('toolbar.manual') } />,
             this._shouldShowButton('shortcuts')
                 && <OverflowMenuItem
                     accessibilityLabel =
