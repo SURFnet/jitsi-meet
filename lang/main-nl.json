@@ -766,7 +766,7 @@
             "roomname": "Enter room name"
         },
         "appDescription": "Met deze tool kun je videobellen zonder poespas. Meer dan een browser met <a href='https://webrtc.org/'>webRTC ondersteuning</a> heb je niet nodig. Dus géén software downloaden, géén addons, géén licentie, en je gasten hoeven ook niet in te loggen.",
-        "appAbout": "Pilot SURF Videobellen is gebaseerd op JitsiMeet: een 100% open source, volledig encrypte videoconference oplossing. De privacy verklaring voor deze pilot kun je <a href='https://edu.nl/83qfg'>hier</a> vinden. Er is ook een <a href='/static/Handleiding%20SURFvideobellen%20NL%20(20190705).pdf'>handleiding</a> beschikbaar. Feedback? We horen het graag via <a href='mailto:meet@surf.nl'>meet@surf.nl</a>.",
+        "appAbout": "Pilot SURF Videobellen is gebaseerd op JitsiMeet: een 100% open source, volledig encrypte videoconference oplossing. De privacy verklaring voor deze pilot kun je <a href='https://edu.nl/83qfg'>hier</a> vinden. Er is ook een <a href='/static/Handleiding%20SURFvideobellen%20NL%20(20190705).pdf' target='_blank'>handleiding</a> beschikbaar. Feedback? We horen het graag via <a href='mailto:meet@surf.nl'>meet@surf.nl</a>.",
         "audioVideoSwitch": {
             "audio": "Voice",
             "video": "Video"
