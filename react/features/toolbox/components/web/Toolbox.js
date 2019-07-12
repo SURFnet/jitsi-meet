@@ -223,6 +223,8 @@ class Toolbox extends Component<Props, State> {
 
         this._onToolbarOpenFeedback
             = this._onToolbarOpenFeedback.bind(this);
+        this._onToolbarOpenManual
+            = this._onToolbarOpenManual.bind(this);
         this._onToolbarOpenInvite = this._onToolbarOpenInvite.bind(this);
         this._onToolbarOpenKeyboardShortcuts
             = this._onToolbarOpenKeyboardShortcuts.bind(this);
@@ -624,6 +626,8 @@ class Toolbox extends Component<Props, State> {
 
         this._doOpenFeedback();
     }
+
+    _onToolbarOpenManual: () => void;
 
     /**
      * Opens the manual in a new window.
