@@ -223,6 +223,8 @@ class Toolbox extends Component<Props, State> {
 
         this._onToolbarOpenFeedback
             = this._onToolbarOpenFeedback.bind(this);
+        this._onToolbarContactSupport
+            = this._onToolbarContactSupport.bind(this);
         this._onToolbarOpenManual
             = this._onToolbarOpenManual.bind(this);
         this._onToolbarOpenInvite = this._onToolbarOpenInvite.bind(this);
@@ -639,6 +641,18 @@ class Toolbox extends Component<Props, State> {
         window.open(this.props.t('toolbar.manualURL'), '_blank');
     }
 
+    _onToolbarContactSupport: () => void;
+
+    /**
+     * Opens the manual in a new window.
+     *
+     * @private
+     * @returns {void}
+     */
+    _onToolbarContactSupport() {
+        window.open('mailto:meet@surf.nl');
+    }
+
     _onToolbarOpenInvite: () => void;
 
     /**
@@ -1012,6 +1026,13 @@ class Toolbox extends Component<Props, State> {
                 key = 'manual'
                 onClick = { this._onToolbarOpenManual }
                 text = { t('toolbar.manual') } />,
+            <OverflowMenuItem
+                accessibilityLabel =
+                    { t('toolbar.accessibilityLabel.contactSupport') }
+                icon = 'icon-open_in_new'
+                key = 'contactSupport'
+                onClick = { this._onToolbarContactSupport }
+                text = { t('toolbar.contactSupport') } />,
             this._shouldShowButton('shortcuts')
                 && <OverflowMenuItem
                     accessibilityLabel =
