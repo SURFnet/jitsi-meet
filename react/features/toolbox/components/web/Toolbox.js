@@ -1029,7 +1029,7 @@ class Toolbox extends Component<Props, State> {
             <OverflowMenuItem
                 accessibilityLabel =
                     { t('toolbar.accessibilityLabel.contactSupport') }
-                icon = 'icon-open_in_new'
+                icon = 'icon-envelop'
                 key = 'contactSupport'
                 onClick = { this._onToolbarContactSupport }
                 text = { t('toolbar.contactSupport') } />,
