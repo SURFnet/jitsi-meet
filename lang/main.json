@@ -766,7 +766,7 @@
             "roomname": "Enter room name"
         },
         "appDescription": "With this tool you can make video calls without fuss. All you need is a webbrowser that supports <a href='https://webrtc.org/'>webRTC</a>. So no software download, no addons, no license and your guests do not have to log in.",
-        "appAbout": "SURF Videoconferencing pilot is based on JitsiMeet: a 100% open source, fully encrypted video conference solution. The privacy statement for this pilot can be found <a href='https://edu.nl/83qfg'>here</a>. Feedback? Please let us know via <a href='mailto:meet@surf.nl'>meet@surf.nl</a>.",
+        "appAbout": "SURF Videoconferencing pilot is based on JitsiMeet: a 100% open source, fully encrypted video conference solution. The privacy statement for this pilot can be found <a href='https://edu.nl/83qfg'>here</a>. There is also a <a href='/static/Handleiding+SURFvideobellen+EN+(20190705).pdf'>manual</a> available. Feedback? Please let us know via <a href='mailto:meet@surf.nl'>meet@surf.nl</a>.",
         "audioVideoSwitch": {
             "audio": "Voice",
             "video": "Video"
