@@ -133,8 +133,6 @@
     font-size: 15px;
     line-height: 30px;
     padding: 5px;
-    max-height:150px;
-    min-height:35px;
     overflow-y: auto;
     resize: none;
     width: 100%;
@@ -287,13 +285,17 @@
     &.local {
         align-items: flex-end;
 
+        .chatmessage {
+            background-color: $chatLocalMessageBackgroundColor;
+            border-radius: 6px 0px 6px 6px;
+        }
+
         .display-name {
             display: none;
         }
 
-        .chatmessage {
-            background-color: $chatLocalMessageBackgroundColor;
-            border-radius: 6px 0px 6px 6px;
+        .timestamp {
+            text-align: right;
         }
     }
 
@@ -306,6 +308,10 @@
         .display-name {
             display: none;
         }
+    }
+
+    .chatmessage-wrapper {
+        max-width: 100%;
     }
 
     .chatmessage {

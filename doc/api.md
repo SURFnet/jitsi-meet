@@ -192,6 +192,11 @@ The `command` parameter is String object with the name of the command. The follo
 api.executeCommand('displayName', 'New Nickname');
 ```
 
+* **password** - Sets the password for the room. This command requires one argument - the password name to be set.
+```javascript
+api.executeCommand('password', 'The Password');
+```
+
 * **subject** - Sets the subject of the conference. This command requires one argument - the new subject to be set.
 ```javascript
 api.executeCommand('subject', 'New Conference Subject');
@@ -220,6 +225,11 @@ api.executeCommand('toggleChat');
 * **toggleShareScreen** - Starts / stops screen sharing. No arguments are required.
 ```javascript
 api.executeCommand('toggleShareScreen');
+```
+
+* **toggleTileView** - Enter / exit tile view layout mode. No arguments are required.
+```javascript
+api.executeCommand('toggleTileView');
 ```
 
 * **hangup** - Hangups the call. No arguments are required.
@@ -259,6 +269,14 @@ The `event` parameter is a String object with the name of the event.
 The `listener` parameter is a Function object with one argument that will be notified when the event occurs with data related to the event.
 
 The following events are currently supported:
+* **cameraError** - event notifications about Jitsi-Meet having failed to access the camera. The listener will receive an object with the following structure:
+```javascript
+{
+    type: string, // A constant representing the overall type of the error.
+    message: string // Additional information about the error.
+}
+```
+
 * **avatarChanged** - event notifications about avatar
 changes. The listener will receive an object with the following structure:
 ```javascript
@@ -282,6 +300,14 @@ changes. The listener will receive an object with the following structure:
 }
 ```
 
+* **micError** - event notifications about Jitsi-Meet having failed to access the mic. The listener will receive an object with the following structure:
+```javascript
+{
+    type: string, // A constant representing the overall type of the error.
+    message: string // Additional information about the error.
+}
+```
+
 * **screenSharingStatusChanged** - receives event notifications about turning on/off the local user screen sharing. The listener will receive object with the following structure:
 ```javascript
 {
@@ -293,6 +319,20 @@ changes. The listener will receive an object with the following structure:
         // will be passed if the source type is unknown or screen share is off.
         sourceType: string|undefined
     }
+}
+```
+
+* **dominantSpeakerChanged** - receives event notifications about change in the dominant speaker. The listener will receive object with the following structure:
+```javascript
+{
+    id: string //participantId of the new dominant speaker
+}
+```
+
+* **tileViewChanged** - event notifications about tile view layout mode being entered or exited. The listener will receive object with the following structure:
+```javascript
+{
+    enabled: boolean, // whether tile view is not displayed or not
 }
 ```
 
@@ -339,6 +379,13 @@ changes. The listener will receive an object with the following structure:
     email: string // the new email
 }
 ```
+* **feedbackSubmitted** - event notifications about conference feedback submission
+```javascript
+{
+    error: string // The error which occurred during submission, if any.
+}
+```
+
 * **filmstripDisplayChanged** - event notifications about the visibility of the filmstrip being updated.
 ```javascript
 {
@@ -354,12 +401,27 @@ changes. The listener will receive an object with the following structure:
 }
 ```
 
+* **participantKickedOut** - event notifications about a participants being removed from the room. The listener will receive an object with the following structure:
+```javascript
+{
+    kicked: {
+        id: string, // the id of the participant removed from the room
+        local: boolean // whether or not the participant is the local particiapnt
+    },
+    kicker: {
+        id: string // the id of the participant who kicked out the other participant
+    }
+}
+```
+
 * **participantLeft** - event notifications about participants that leave the room. The listener will receive an object with the following structure:
 ```javascript
 {
     id: string // the id of the participant
 }
 ```
+
+* **passwordRequired** - event notifications fired when failing to join a room because it has a password.
 
 * **videoConferenceJoined** - event notifications fired when the local user has joined the video conference. The listener will receive an object with the following structure:
 ```javascript
@@ -401,6 +463,8 @@ The listener will receive an object with the following structure:
     subject: string // the new subject
 }
 ```
+
+* **suspendDetected** - event notifications about detecting suspend event in host computer.
 
 You can also add multiple event listeners by using `addEventListeners`.
 This method requires one argument of type Object. The object argument must

@@ -53,9 +53,7 @@ dependencies {
 
     implementation project(':react-native-background-timer')
     implementation project(':react-native-calendar-events')
-    implementation(project(':react-native-fast-image')) {
-        exclude group: 'com.android.support'
-    }
+    implementation project(':react-native-community-async-storage')
     implementation project(':react-native-immersive')
     implementation project(':react-native-keep-awake')
     implementation project(':react-native-linear-gradient')
@@ -63,7 +61,6 @@ dependencies {
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-webrtc')
     implementation project(':react-native-webview')
-    implementation project(':@react-native-community_async-storage')
 
     testImplementation 'junit:junit:4.12'
 }
@@ -152,6 +149,8 @@ android.libraryVariants.all { def variant ->
             from("${projectDir}/../../sounds/incomingMessage.wav")
             from("${projectDir}/../../sounds/joined.wav")
             from("${projectDir}/../../sounds/left.wav")
+            from("${projectDir}/../../sounds/liveStreamingOn.mp3")
+            from("${projectDir}/../../sounds/liveStreamingOff.mp3")
             from("${projectDir}/../../sounds/outgoingRinging.wav")
             from("${projectDir}/../../sounds/outgoingStart.wav")
             from("${projectDir}/../../sounds/recordingOn.mp3")
@@ -207,8 +206,7 @@ publishing {
                     def groupId = it.moduleGroup
                     def artifactId = it.moduleName
 
-                    if ((artifactId.startsWith('react-native-') || artifactId.startsWith('@react-native-community'))
-                            && groupId.equals('jitsi-meet')) {
+                    if (artifactId.startsWith('react-native-') && groupId.equals('jitsi-meet')) {
                         groupId = rootProject.ext.moduleGroupId
                     }
 

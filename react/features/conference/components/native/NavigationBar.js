@@ -1,6 +1,5 @@
 // @flow
 
-import _ from 'lodash';
 import React, { Component } from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -47,7 +46,7 @@ class NavigationBar extends Component<Props> {
                 pointerEvents = 'none'
                 style = { styles.gradient }>
                 <SafeAreaView>
-                    <View style = { styles.gradientStretch } />
+                    <View style = { styles.gradientStretchTop } />
                 </SafeAreaView>
             </LinearGradient>,
             <View
@@ -82,7 +81,7 @@ class NavigationBar extends Component<Props> {
  */
 function _mapStateToProps(state) {
     return {
-        _meetingName: _.startCase(getConferenceName(state)),
+        _meetingName: getConferenceName(state),
         _visible: isToolboxVisible(state)
     };
 }

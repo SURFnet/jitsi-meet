@@ -4,30 +4,26 @@ import { reloadNow } from '../../app';
 import {
     ACTION_PINNED,
     ACTION_UNPINNED,
-    createAudioOnlyChangedEvent,
     createConnectionEvent,
+    createOfferAnswerFailedEvent,
     createPinnedEvent,
     sendAnalytics
 } from '../../analytics';
 import { CONNECTION_ESTABLISHED, CONNECTION_FAILED } from '../connection';
-import { setVideoMuted, VIDEO_MUTISM_AUTHORITY } from '../media';
+import { JitsiConferenceErrors } from '../lib-jitsi-meet';
 import {
-    getLocalParticipant,
     getParticipantById,
     getPinnedParticipant,
     PARTICIPANT_UPDATED,
     PIN_PARTICIPANT
 } from '../participants';
 import { MiddlewareRegistry, StateListenerRegistry } from '../redux';
-import UIEvents from '../../../../service/UI/UIEvents';
 import { TRACK_ADDED, TRACK_REMOVED } from '../tracks';
 
 import {
     conferenceFailed,
-    conferenceLeft,
     conferenceWillLeave,
     createConference,
-    setLastN,
     setSubject
 } from './actions';
 import {
@@ -36,16 +32,14 @@ import {
     CONFERENCE_SUBJECT_CHANGED,
     CONFERENCE_WILL_LEAVE,
     DATA_CHANNEL_OPENED,
-    SET_AUDIO_ONLY,
-    SET_LASTN,
+    SET_PENDING_SUBJECT_CHANGE,
     SET_ROOM
 } from './actionTypes';
 import {
     _addLocalTracksToConference,
+    _removeLocalTracksFromConference,
     forEachConference,
-    getCurrentConference,
-    _handleParticipantError,
-    _removeLocalTracksFromConference
+    getCurrentConference
 } from './functions';
 
 const logger = require('jitsi-meet-logger').getLogger(__filename);
@@ -92,12 +86,6 @@ MiddlewareRegistry.register(store => next => action => {
 
     case PIN_PARTICIPANT:
         return _pinParticipant(store, next, action);
-
-    case SET_AUDIO_ONLY:
-        return _setAudioOnly(store, next, action);
-
-    case SET_LASTN:
-        return _setLastN(store, next, action);
 
     case SET_ROOM:
         return _setRoom(store, next, action);
@@ -152,6 +140,12 @@ StateListenerRegistry.register(
 function _conferenceFailed(store, next, action) {
     const result = next(action);
 
+    const { conference, error } = action;
+
+    if (error.name === JitsiConferenceErrors.OFFER_ANSWER_FAILED) {
+        sendAnalytics(createOfferAnswerFailedEvent());
+    }
+
     // FIXME: Workaround for the web version. Currently, the creation of the
     // conference is handled by /conference.js and appropriate failure handlers
     // are set there.
@@ -165,8 +159,6 @@ function _conferenceFailed(store, next, action) {
     }
 
     // XXX After next(action), it is clear whether the error is recoverable.
-    const { conference, error } = action;
-
     !error.recoverable
         && conference
         && conference.leave().catch(reason => {
@@ -193,21 +185,10 @@ function _conferenceFailed(store, next, action) {
  */
 function _conferenceJoined({ dispatch, getState }, next, action) {
     const result = next(action);
+    const { conference } = action;
+    const { pendingSubjectChange } = getState()['features/base/conference'];
 
-    const {
-        audioOnly,
-        conference,
-        pendingSubjectChange
-    } = getState()['features/base/conference'];
-
-    if (pendingSubjectChange) {
-        dispatch(setSubject(pendingSubjectChange));
-    }
-
-    // FIXME On Web the audio only mode for "start audio only" is toggled before
-    // conference is added to the redux store ("on conference joined" action)
-    // and the LastN value needs to be synchronized here.
-    audioOnly && conference.getLastN() !== 0 && dispatch(setLastN(0));
+    pendingSubjectChange && dispatch(setSubject(pendingSubjectChange));
 
     // FIXME: Very dirty solution. This will work on web only.
     // When the user closes the window or quits the browser, lib-jitsi-meet
@@ -329,9 +310,16 @@ function _connectionFailed({ dispatch, getState }, next, action) {
  * @private
  * @returns {Object} The value returned by {@code next(action)}.
  */
-function _conferenceSubjectChanged({ getState }, next, action) {
+function _conferenceSubjectChanged({ dispatch, getState }, next, action) {
     const result = next(action);
     const { subject } = getState()['features/base/conference'];
+
+    if (subject) {
+        dispatch({
+            type: SET_PENDING_SUBJECT_CHANGE,
+            subject: undefined
+        });
+    }
 
     typeof APP === 'object' && APP.API.notifySubjectChanged(subject);
 
@@ -424,127 +412,27 @@ function _pinParticipant({ getState }, next, action) {
     const participants = state['features/base/participants'];
     const id = action.participant.id;
     const participantById = getParticipantById(participants, id);
+    const pinnedParticipant = getPinnedParticipant(participants);
+    const actionName = id ? ACTION_PINNED : ACTION_UNPINNED;
+    const local
+        = (participantById && participantById.local)
+            || (!id && pinnedParticipant && pinnedParticipant.local);
+    let participantIdForEvent;
 
-    if (typeof APP !== 'undefined') {
-        const pinnedParticipant = getPinnedParticipant(participants);
-        const actionName = id ? ACTION_PINNED : ACTION_UNPINNED;
-        const local
-            = (participantById && participantById.local)
-                || (!id && pinnedParticipant && pinnedParticipant.local);
-        let participantIdForEvent;
-
-        if (local) {
-            participantIdForEvent = local;
-        } else {
-            participantIdForEvent = actionName === ACTION_PINNED
-                ? id : pinnedParticipant && pinnedParticipant.id;
-        }
-
-        sendAnalytics(createPinnedEvent(
-            actionName,
-            participantIdForEvent,
-            {
-                local,
-                'participant_count': conference.getParticipantCount()
-            }));
-    }
-
-    // The following condition prevents signaling to pin local participant and
-    // shared videos. The logic is:
-    // - If we have an ID, we check if the participant identified by that ID is
-    //   local or a bot/fake participant (such as with shared video).
-    // - If we don't have an ID (i.e. no participant identified by an ID), we
-    //   check for local participant. If she's currently pinned, then this
-    //   action will unpin her and that's why we won't signal here too.
-    let pin;
-
-    if (participantById) {
-        pin = !participantById.local && !participantById.isFakeParticipant;
+    if (local) {
+        participantIdForEvent = local;
     } else {
-        const localParticipant = getLocalParticipant(participants);
-
-        pin = !localParticipant || !localParticipant.pinned;
-    }
-    if (pin) {
-        try {
-            conference.pinParticipant(id);
-        } catch (err) {
-            _handleParticipantError(err);
-        }
+        participantIdForEvent
+            = actionName === ACTION_PINNED ? id : pinnedParticipant && pinnedParticipant.id;
     }
 
-    return next(action);
-}
-
-/**
- * Sets the audio-only flag for the current conference. When audio-only is set,
- * local video is muted and last N is set to 0 to avoid receiving remote video.
- *
- * @param {Store} store - The redux store in which the specified {@code action}
- * is being dispatched.
- * @param {Dispatch} next - The redux {@code dispatch} function to dispatch the
- * specified {@code action} to the specified {@code store}.
- * @param {Action} action - The redux action {@code SET_AUDIO_ONLY} which is
- * being dispatched in the specified {@code store}.
- * @private
- * @returns {Object} The value returned by {@code next(action)}.
- */
-function _setAudioOnly({ dispatch, getState }, next, action) {
-    const { audioOnly: oldValue } = getState()['features/base/conference'];
-    const result = next(action);
-    const { audioOnly: newValue } = getState()['features/base/conference'];
-
-    // Send analytics. We could've done it in the action creator setAudioOnly.
-    // I don't know why it has to happen as early as possible but the analytics
-    // were originally sent before the SET_AUDIO_ONLY action was even dispatched
-    // in the redux store so I'm now sending the analytics as early as possible.
-    if (oldValue !== newValue) {
-        sendAnalytics(createAudioOnlyChangedEvent(newValue));
-        logger.log(`Audio-only ${newValue ? 'enabled' : 'disabled'}`);
-    }
-
-    // Set lastN to 0 in case audio-only is desired; leave it as undefined,
-    // otherwise, and the default lastN value will be chosen automatically.
-    dispatch(setLastN(newValue ? 0 : undefined));
-
-    // Mute/unmute the local video.
-    dispatch(
-        setVideoMuted(
-            newValue,
-            VIDEO_MUTISM_AUTHORITY.AUDIO_ONLY,
-            action.ensureVideoTrack));
-
-    if (typeof APP !== 'undefined') {
-        // TODO This should be a temporary solution that lasts only until video
-        // tracks and all ui is moved into react/redux on the web.
-        APP.UI.emitEvent(UIEvents.TOGGLE_AUDIO_ONLY, newValue);
-    }
-
-    return result;
-}
-
-/**
- * Sets the last N (value) of the video channel in the conference.
- *
- * @param {Store} store - The redux store in which the specified {@code action}
- * is being dispatched.
- * @param {Dispatch} next - The redux {@code dispatch} function to dispatch the
- * specified {@code action} to the specified {@code store}.
- * @param {Action} action - The redux action {@code SET_LASTN} which is being
- * dispatched in the specified {@code store}.
- * @private
- * @returns {Object} The value returned by {@code next(action)}.
- */
-function _setLastN({ getState }, next, action) {
-    const { conference } = getState()['features/base/conference'];
-
-    if (conference) {
-        try {
-            conference.setLastN(action.lastN);
-        } catch (err) {
-            logger.error(`Failed to set lastN: ${err}`);
-        }
-    }
+    sendAnalytics(createPinnedEvent(
+        actionName,
+        participantIdForEvent,
+        {
+            local,
+            'participant_count': conference.getParticipantCount()
+        }));
 
     return next(action);
 }
@@ -567,48 +455,30 @@ function _setReceiverVideoConstraint(conference, preferred, max) {
 }
 
 /**
- * Notifies the feature {@code base/conference} that the redix action
- * {@link SET_ROOM} is being dispatched within a specific redux store.
+ * Notifies the feature base/conference that the action
+ * {@code SET_ROOM} is being dispatched within a specific
+ *  redux store.
  *
  * @param {Store} store - The redux store in which the specified {@code action}
  * is being dispatched.
  * @param {Dispatch} next - The redux {@code dispatch} function to dispatch the
  * specified {@code action} to the specified {@code store}.
- * @param {Action} action - The redux action {@code SET_ROOM} which is being
- * dispatched in the specified {@code store}.
+ * @param {Action} action - The redux action {@code SET_ROOM}
+ * which is being dispatched in the specified {@code store}.
  * @private
  * @returns {Object} The value returned by {@code next(action)}.
  */
 function _setRoom({ dispatch, getState }, next, action) {
-    const result = next(action);
-
-    // By the time SET_ROOM is dispatched, base/connection's locationURL and
-    // base/conference's leaving should be the only conference-related sources
-    // of truth.
     const state = getState();
-    const { leaving } = state['features/base/conference'];
-    const { locationURL } = state['features/base/connection'];
-    const dispatchConferenceLeft = new Set();
+    const { subject } = state['features/base/config'];
+    const { room } = action;
 
-    // Figure out which of the JitsiConferences referenced by base/conference
-    // have not dispatched or are not likely to dispatch CONFERENCE_FAILED and
-    // CONFERENCE_LEFT.
-    forEachConference(state, (conference, url) => {
-        if (conference !== leaving && url && url !== locationURL) {
-            dispatchConferenceLeft.add(conference);
-        }
-
-        return true; // All JitsiConference instances are to be examined.
-    });
-
-    // Dispatch CONFERENCE_LEFT for the JitsiConferences referenced by
-    // base/conference which have not dispatched or are not likely to dispatch
-    // CONFERENCE_FAILED or CONFERENCE_LEFT.
-    for (const conference of dispatchConferenceLeft) {
-        dispatch(conferenceLeft(conference));
+    if (room) {
+        // Set the stored subject.
+        dispatch(setSubject(subject));
     }
 
-    return result;
+    return next(action);
 }
 
 /**

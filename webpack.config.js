@@ -45,10 +45,10 @@ const config = {
                 plugins: [
                     require.resolve('@babel/plugin-transform-flow-strip-types'),
                     require.resolve('@babel/plugin-proposal-class-properties'),
-                    require.resolve(
-                        '@babel/plugin-proposal-export-default-from'),
-                    require.resolve(
-                        '@babel/plugin-proposal-export-namespace-from')
+                    require.resolve('@babel/plugin-proposal-export-default-from'),
+                    require.resolve('@babel/plugin-proposal-export-namespace-from'),
+                    require.resolve('@babel/plugin-proposal-nullish-coalescing-operator'),
+                    require.resolve('@babel/plugin-proposal-optional-chaining')
                 ],
                 presets: [
                     [
@@ -151,6 +151,15 @@ module.exports = [
                 './react/features/analytics/handlers/GoogleAnalyticsHandler.js'
         }
     }),
+    Object.assign({}, config, {
+        entry: {
+            'video-blur-effect': './react/features/stream-effects/blur/index.js'
+        },
+        output: Object.assign({}, config.output, {
+            library: [ 'JitsiMeetJS', 'app', 'effects' ],
+            libraryTarget: 'window'
+        })
+    }),
 
     // The Webpack configuration to bundle external_api.js (aka
     // JitsiMeetExternalAPI).
@@ -177,6 +186,7 @@ module.exports = [
 function devServerProxyBypass({ path }) {
     if (path.startsWith('/css/') || path.startsWith('/doc/')
             || path.startsWith('/fonts/') || path.startsWith('/images/')
+            || path.startsWith('/sounds/')
             || path.startsWith('/static/')) {
         return path;
     }

@@ -1,21 +1,20 @@
 // @flow
 
 import React from 'react';
-
-import { BackHandler, SafeAreaView, StatusBar, View } from 'react-native';
+import { NativeModules, SafeAreaView, StatusBar, View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
 import { appNavigate } from '../../../app';
-import { connect, disconnect } from '../../../base/connection';
+import { PIP_ENABLED, getFeatureFlag } from '../../../base/flags';
 import { getParticipantCount } from '../../../base/participants';
 import { Container, LoadingIndicator, TintedView } from '../../../base/react';
-import { connect as reactReduxConnect } from '../../../base/redux';
+import { connect } from '../../../base/redux';
 import {
     isNarrowAspectRatio,
     makeAspectRatioAware
 } from '../../../base/responsive-ui';
 import { TestConnectionInfo } from '../../../base/testing';
-import { createDesiredLocalTracks } from '../../../base/tracks';
-import { ConferenceNotification } from '../../../calendar-sync';
+import { ConferenceNotification, isCalendarEnabled } from '../../../calendar-sync';
 import { Chat } from '../../../chat';
 import { DisplayNameLabel } from '../../../display-name';
 import {
@@ -25,6 +24,7 @@ import {
     TileView
 } from '../../../filmstrip';
 import { LargeVideo } from '../../../large-video';
+import { BackButtonRegistry } from '../../../mobile/back-button';
 import { AddPeopleDialog, CalleeInfoContainer } from '../../../invite';
 import { Captions } from '../../../subtitles';
 import { setToolboxVisible, Toolbox } from '../../../toolbox';
@@ -35,7 +35,7 @@ import {
 } from '../AbstractConference';
 import Labels from './Labels';
 import NavigationBar from './NavigationBar';
-import styles from './styles';
+import styles, { NAVBAR_GRADIENT_COLORS } from './styles';
 
 import type { AbstractProps } from '../AbstractConference';
 
@@ -43,6 +43,13 @@ import type { AbstractProps } from '../AbstractConference';
  * The type of the React {@code Component} props of {@link Conference}.
  */
 type Props = AbstractProps & {
+
+    /**
+     * Wherther the calendar feature is enabled or not.
+     *
+     * @private
+     */
+    _calendarEnabled: boolean,
 
     /**
      * The indicator which determines that we are still connecting to the
@@ -67,45 +74,18 @@ type Props = AbstractProps & {
     _largeVideoParticipantId: string,
 
     /**
-     * Current conference's full URL.
-     *
-     * @private
-     */
-    _locationURL: URL,
-
-    /**
-     * The handler which dispatches the (redux) action connect.
-     *
-     * @private
-     * @returns {void}
-     */
-    _onConnect: Function,
-
-    /**
-     * The handler which dispatches the (redux) action disconnect.
-     *
-     * @private
-     * @returns {void}
-     */
-    _onDisconnect: Function,
-
-    /**
-     * Handles a hardware button press for back navigation. Leaves the
-     * associated {@code Conference}.
-     *
-     * @private
-     * @returns {boolean} As the associated conference is unconditionally left
-     * and exiting the app while it renders a {@code Conference} is undesired,
-     * {@code true} is always returned.
-     */
-    _onHardwareBackPress: Function,
-
-    /**
      * The number of participants in the conference.
      *
      * @private
      */
     _participantCount: number,
+
+    /**
+     * Whether Picture-in-Picture is enabled.
+     *
+     * @private
+     */
+    _pictureInPictureEnabled: boolean,
 
     /**
      * The indicator which determines whether the UI is reduced (to accommodate
@@ -134,11 +114,9 @@ type Props = AbstractProps & {
     _toolboxVisible: boolean,
 
     /**
-     * The indicator which determines whether the Toolbox is always visible.
-     *
-     * @private
+     * The redux {@code dispatch} function.
      */
-    _toolboxAlwaysVisible: boolean
+    dispatch: Function
 };
 
 /**
@@ -156,6 +134,8 @@ class Conference extends AbstractConference<Props, *> {
 
         // Bind event handlers so they are only bound once per instance.
         this._onClick = this._onClick.bind(this);
+        this._onHardwareBackPress = this._onHardwareBackPress.bind(this);
+        this._setToolboxVisible = this._setToolboxVisible.bind(this);
     }
 
     /**
@@ -166,17 +146,11 @@ class Conference extends AbstractConference<Props, *> {
      * @returns {void}
      */
     componentDidMount() {
-        this.props._onConnect();
-
-        BackHandler.addEventListener(
-            'hardwareBackPress',
-            this.props._onHardwareBackPress);
+        BackButtonRegistry.addListener(this._onHardwareBackPress);
 
         // Show the toolbox if we are the only participant; otherwise, the whole
         // UI looks too unpopulated the LargeVideo visible.
-        const { _participantCount, _setToolboxVisible } = this.props;
-
-        _participantCount === 1 && _setToolboxVisible(true);
+        this.props._participantCount === 1 && this._setToolboxVisible(true);
     }
 
     /**
@@ -184,34 +158,23 @@ class Conference extends AbstractConference<Props, *> {
      *
      * @inheritdoc
      */
-    componentDidUpdate(pevProps: Props) {
+    componentDidUpdate(prevProps: Props) {
         const {
-            _locationURL: oldLocationURL,
-            _participantCount: oldParticipantCount,
-            _room: oldRoom
-        } = pevProps;
+            _participantCount: oldParticipantCount
+        } = prevProps;
         const {
-            _locationURL: newLocationURL,
             _participantCount: newParticipantCount,
-            _room: newRoom,
-            _setToolboxVisible,
             _toolboxVisible
         } = this.props;
-
-        // If the location URL changes we need to reconnect.
-        oldLocationURL !== newLocationURL && newRoom && this.props._onDisconnect();
-
-        // Start the connection process when there is a (valid) room.
-        oldRoom !== newRoom && newRoom && this.props._onConnect();
 
         if (oldParticipantCount === 1
                 && newParticipantCount > 1
                 && _toolboxVisible) {
-            _setToolboxVisible(false);
+            this._setToolboxVisible(false);
         } else if (oldParticipantCount > 1
                 && newParticipantCount === 1
                 && !_toolboxVisible) {
-            _setToolboxVisible(true);
+            this._setToolboxVisible(true);
         }
     }
 
@@ -225,11 +188,7 @@ class Conference extends AbstractConference<Props, *> {
      */
     componentWillUnmount() {
         // Tear handling any hardware button presses for back navigation down.
-        BackHandler.removeEventListener(
-            'hardwareBackPress',
-            this.props._onHardwareBackPress);
-
-        this.props._onDisconnect();
+        BackButtonRegistry.removeListener(this._onHardwareBackPress);
     }
 
     /**
@@ -241,10 +200,14 @@ class Conference extends AbstractConference<Props, *> {
     render() {
         const {
             _connecting,
+            _filmstripVisible,
             _largeVideoParticipantId,
             _reducedUI,
-            _shouldDisplayTileView
+            _shouldDisplayTileView,
+            _toolboxVisible
         } = this.props;
+        const showGradient = _toolboxVisible;
+        const applyGradientStretching = _filmstripVisible && isNarrowAspectRatio(this) && !_shouldDisplayTileView;
 
         return (
             <Container style = { styles.conference }>
@@ -284,6 +247,22 @@ class Conference extends AbstractConference<Props, *> {
                     pointerEvents = 'box-none'
                     style = { styles.toolboxAndFilmstripContainer }>
 
+                    { showGradient && <LinearGradient
+                        colors = { NAVBAR_GRADIENT_COLORS }
+                        end = {{
+                            x: 0.0,
+                            y: 0.0
+                        }}
+                        pointerEvents = 'none'
+                        start = {{
+                            x: 0.0,
+                            y: 1.0
+                        }}
+                        style = { [
+                            styles.bottomGradient,
+                            applyGradientStretching ? styles.gradientStretchBottom : undefined
+                        ] } />}
+
                     <Labels />
 
                     <Captions onPress = { this._onClick } />
@@ -291,7 +270,7 @@ class Conference extends AbstractConference<Props, *> {
                     { _shouldDisplayTileView || <DisplayNameLabel participantId = { _largeVideoParticipantId } /> }
 
                     {/*
-                      * The Toolbox is in a stacking layer bellow the Filmstrip.
+                      * The Toolbox is in a stacking layer below the Filmstrip.
                       */}
                     <Toolbox />
 
@@ -334,13 +313,33 @@ class Conference extends AbstractConference<Props, *> {
      * @returns {void}
      */
     _onClick() {
-        if (this.props._toolboxAlwaysVisible) {
-            return;
+        this._setToolboxVisible(!this.props._toolboxVisible);
+    }
+
+    _onHardwareBackPress: () => boolean;
+
+    /**
+     * Handles a hardware button press for back navigation. Enters Picture-in-Picture mode
+     * (if supported) or leaves the associated {@code Conference} otherwise.
+     *
+     * @returns {boolean} Exiting the app is undesired, so {@code true} is always returned.
+     */
+    _onHardwareBackPress() {
+        let p;
+
+        if (this.props._pictureInPictureEnabled) {
+            const { PictureInPicture } = NativeModules;
+
+            p = PictureInPicture.enterPictureInPicture();
+        } else {
+            p = Promise.reject(new Error('PiP not enabled'));
         }
 
-        const toolboxVisible = !this.props._toolboxVisible;
+        p.catch(() => {
+            this.props.dispatch(appNavigate(undefined));
+        });
 
-        this.props._setToolboxVisible(toolboxVisible);
+        return true;
     }
 
     /**
@@ -350,10 +349,10 @@ class Conference extends AbstractConference<Props, *> {
      * @returns {React$Node}
      */
     _renderConferenceNotification() {
-        // XXX If the calendar feature is disabled on a platform, then we don't
-        // have its components exported so an undefined check is necessary.
+        const { _calendarEnabled, _reducedUI } = this.props;
+
         return (
-            !this.props._reducedUI && ConferenceNotification
+            _calendarEnabled && !_reducedUI
                 ? <ConferenceNotification />
                 : undefined);
     }
@@ -388,70 +387,20 @@ class Conference extends AbstractConference<Props, *> {
             }
         );
     }
-}
 
-/**
- * Maps dispatching of some action to React component props.
- *
- * @param {Function} dispatch - Redux action dispatcher.
- * @private
- * @returns {{
- *     _onConnect: Function,
- *     _onDisconnect: Function,
- *     _onHardwareBackPress: Function,
- *     _setToolboxVisible: Function
- * }}
- */
-function _mapDispatchToProps(dispatch) {
-    return {
-        /**
-         * Dispatches actions to create the desired local tracks and for
-         * connecting to the conference.
-         *
-         * @private
-         * @returns {void}
-         */
-        _onConnect() {
-            dispatch(createDesiredLocalTracks());
-            dispatch(connect());
-        },
+    _setToolboxVisible: (boolean) => void;
 
-        /**
-         * Dispatches an action disconnecting from the conference.
-         *
-         * @private
-         * @returns {void}
-         */
-        _onDisconnect() {
-            dispatch(disconnect());
-        },
-
-        /**
-         * Handles a hardware button press for back navigation. Leaves the
-         * associated {@code Conference}.
-         *
-         * @returns {boolean} As the associated conference is unconditionally
-         * left and exiting the app while it renders a {@code Conference} is
-         * undesired, {@code true} is always returned.
-         */
-        _onHardwareBackPress() {
-            dispatch(appNavigate(undefined));
-
-            return true;
-        },
-
-        /**
-         * Dispatches an action changing the visibility of the {@link Toolbox}.
-         *
-         * @private
-         * @param {boolean} visible - Pass {@code true} to show the
-         * {@code Toolbox} or {@code false} to hide it.
-         * @returns {void}
-         */
-        _setToolboxVisible(visible) {
-            dispatch(setToolboxVisible(visible));
-        }
-    };
+    /**
+     * Dispatches an action changing the visibility of the {@link Toolbox}.
+     *
+     * @private
+     * @param {boolean} visible - Pass {@code true} to show the
+     * {@code Toolbox} or {@code false} to hide it.
+     * @returns {void}
+     */
+    _setToolboxVisible(visible) {
+        this.props.dispatch(setToolboxVisible(visible));
+    }
 }
 
 /**
@@ -462,15 +411,14 @@ function _mapDispatchToProps(dispatch) {
  * @returns {Props}
  */
 function _mapStateToProps(state) {
-    const { connecting, connection, locationURL }
-        = state['features/base/connection'];
+    const { connecting, connection } = state['features/base/connection'];
     const {
         conference,
         joining,
         leaving
     } = state['features/base/conference'];
     const { reducedUI } = state['features/base/responsive-ui'];
-    const { alwaysVisible, visible } = state['features/toolbox'];
+    const { visible } = state['features/toolbox'];
 
     // XXX There is a window of time between the successful establishment of the
     // XMPP connection and the subsequent commencement of joining the MUC during
@@ -486,6 +434,14 @@ function _mapStateToProps(state) {
 
     return {
         ...abstractMapStateToProps(state),
+
+        /**
+         * Wherther the calendar feature is enabled or not.
+         *
+         * @private
+         * @type {boolean}
+         */
+        _calendarEnabled: isCalendarEnabled(state),
 
         /**
          * The indicator which determines that we are still connecting to the
@@ -509,20 +465,20 @@ function _mapStateToProps(state) {
         _largeVideoParticipantId: state['features/large-video'].participantId,
 
         /**
-         * Current conference's full URL.
-         *
-         * @private
-         * @type {URL}
-         */
-        _locationURL: locationURL,
-
-        /**
          * The number of participants in the conference.
          *
          * @private
          * @type {number}
          */
         _participantCount: getParticipantCount(state),
+
+        /**
+         * Whether Picture-in-Picture is enabled.
+         *
+         * @private
+         * @type {boolean}
+         */
+        _pictureInPictureEnabled: getFeatureFlag(state, PIP_ENABLED),
 
         /**
          * The indicator which determines whether the UI is reduced (to
@@ -539,17 +495,8 @@ function _mapStateToProps(state) {
          * @private
          * @type {boolean}
          */
-        _toolboxVisible: visible,
-
-        /**
-         * The indicator which determines whether the Toolbox is always visible.
-         *
-         * @private
-         * @type {boolean}
-         */
-        _toolboxAlwaysVisible: alwaysVisible
+        _toolboxVisible: visible
     };
 }
 
-export default reactReduxConnect(_mapStateToProps, _mapDispatchToProps)(
-    makeAspectRatioAware(Conference));
+export default connect(_mapStateToProps)(makeAspectRatioAware(Conference));

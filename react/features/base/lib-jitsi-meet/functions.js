@@ -43,7 +43,9 @@ export function createLocalTrack(type: string, deviceId: string) {
  * otherwise.
  */
 export function isAnalyticsEnabled(stateful: Function | Object) {
-    return !toState(stateful)['features/base/config'].disableThirdPartyRequests;
+    const { disableThirdPartyRequests, analytics = {} } = toState(stateful)['features/base/config'];
+
+    return !disableThirdPartyRequests && !analytics.disabled;
 }
 
 /**
@@ -68,6 +70,7 @@ export function isFatalJitsiConferenceError(error: Object | string) {
     return (
         error === JitsiConferenceErrors.FOCUS_DISCONNECTED
             || error === JitsiConferenceErrors.FOCUS_LEFT
+            || error === JitsiConferenceErrors.OFFER_ANSWER_FAILED
             || error === JitsiConferenceErrors.VIDEOBRIDGE_NOT_AVAILABLE);
 }
 

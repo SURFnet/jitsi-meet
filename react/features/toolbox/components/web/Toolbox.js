@@ -8,7 +8,7 @@ import {
     createToolbarEvent,
     sendAnalytics
 } from '../../../analytics';
-import { openDialog } from '../../../base/dialog';
+import { openDialog, toggleDialog } from '../../../base/dialog';
 import { translate } from '../../../base/i18n';
 import {
     getLocalParticipant,
@@ -18,6 +18,7 @@ import {
 import { connect } from '../../../base/redux';
 import { OverflowMenuItem } from '../../../base/toolbox';
 import { getLocalVideoTrack, toggleScreensharing } from '../../../base/tracks';
+import { VideoBlurButton } from '../../../blur';
 import { ChatCounter, toggleChat } from '../../../chat';
 import { toggleDocument } from '../../../etherpad';
 import { openFeedbackDialog } from '../../../feedback';
@@ -220,7 +221,8 @@ class Toolbox extends Component<Props, State> {
             = this._onShortcutToggleRaiseHand.bind(this);
         this._onShortcutToggleScreenshare
             = this._onShortcutToggleScreenshare.bind(this);
-
+        this._onShortcutToggleVideoQuality
+            = this._onShortcutToggleVideoQuality.bind(this);
         this._onToolbarOpenFeedback
             = this._onToolbarOpenFeedback.bind(this);
         this._onToolbarContactSupport
@@ -263,6 +265,11 @@ class Toolbox extends Component<Props, State> {
      */
     componentDidMount() {
         const KEYBOARD_SHORTCUTS = [
+            this._shouldShowButton('videoquality') && {
+                character: 'A',
+                exec: this._onShortcutToggleVideoQuality,
+                helpDescription: 'keyboardShortcuts.videoQuality'
+            },
             this._shouldShowButton('chat') && {
                 character: 'C',
                 exec: this._onShortcutToggleChat,
@@ -324,7 +331,7 @@ class Toolbox extends Component<Props, State> {
      * @returns {void}
      */
     componentWillUnmount() {
-        [ 'C', 'D', 'R', 'S' ].forEach(letter =>
+        [ 'A', 'C', 'D', 'R', 'S' ].forEach(letter =>
             APP.keyboardshortcut.unregisterShortcut(letter));
 
         window.removeEventListener('resize', this._onResize);
@@ -388,7 +395,7 @@ class Toolbox extends Component<Props, State> {
     }
 
     /**
-     * Dispatches an action to toggle the video quality dialog.
+     * Dispatches an action to open the video quality dialog.
      *
      * @private
      * @returns {void}
@@ -483,6 +490,16 @@ class Toolbox extends Component<Props, State> {
         this.props.dispatch(toggleSharedVideo());
     }
 
+    /**
+     * Dispatches an action to toggle the video quality dialog.
+     *
+     * @private
+     * @returns {void}
+     */
+    _doToggleVideoQuality() {
+        this.props.dispatch(toggleDialog(VideoQualityDialog));
+    }
+
     _onMouseOut: () => void;
 
     /**
@@ -556,6 +573,21 @@ class Toolbox extends Component<Props, State> {
             }));
 
         this._doToggleChat();
+    }
+
+    _onShortcutToggleVideoQuality: () => void;
+
+    /**
+    * Creates an analytics keyboard shortcut event and dispatches an action for
+    * toggling the display of Video Quality.
+    *
+    * @private
+    * @returns {void}
+    */
+    _onShortcutToggleVideoQuality() {
+        sendAnalytics(createShortcutEvent('video.quality'));
+
+        this._doToggleVideoQuality();
     }
 
     _onShortcutToggleFullScreen: () => void;
@@ -946,6 +978,7 @@ class Toolbox extends Component<Props, State> {
             _etherpadInitialized,
             _feedbackConfigured,
             _fullScreen,
+            _screensharing,
             _sharingVideo,
             t
         } = this.props;
@@ -998,6 +1031,10 @@ class Toolbox extends Component<Props, State> {
                     text = { _editingDocument
                         ? t('toolbar.documentClose')
                         : t('toolbar.documentOpen') } />,
+            <VideoBlurButton
+                key = 'videobackgroundblur'
+                showLabel = { true }
+                visible = { this._shouldShowButton('videobackgroundblur') && !_screensharing } />,
             <SettingsButton
                 key = 'settings'
                 showLabel = { true }

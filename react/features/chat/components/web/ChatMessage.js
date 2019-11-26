@@ -2,10 +2,10 @@
 
 import React from 'react';
 import { toArray } from 'react-emoji-render';
-import Linkify from 'react-linkify';
 
 
 import { translate } from '../../../base/i18n';
+import { Linkify } from '../../../base/react';
 
 import AbstractChatMessage, {
     type Props
@@ -43,29 +43,52 @@ class ChatMessage extends AbstractChatMessage<Props> {
 
         content.forEach(i => {
             if (typeof i === 'string') {
-                processedMessage.push(
-                    <Linkify
-                        key = { i }
-                        properties = {{
-                            rel: 'noopener noreferrer',
-                            target: '_blank'
-                        }}>{ i }</Linkify>);
+                processedMessage.push(<Linkify key = { i }>{ i }</Linkify>);
             } else {
                 processedMessage.push(i);
             }
         });
 
         return (
-            <div className = 'chatmessage'>
-                { this.props.showDisplayName && <div className = 'display-name'>
-                    { message.displayName }
-                </div> }
-                <div className = 'usermessage'>
-                    { processedMessage }
+            <div className = 'chatmessage-wrapper'>
+                <div className = 'chatmessage'>
+                    { this.props.showDisplayName && this._renderDisplayName() }
+                    <div className = 'usermessage'>
+                        { processedMessage }
+                    </div>
                 </div>
+                { this.props.showTimestamp && this._renderTimestamp() }
+            </div>
+        );
+    }
+
+    _getFormattedTimestamp: () => string;
+
+    /**
+     * Renders the display name of the sender.
+     *
+     * @returns {React$Element<*>}
+     */
+    _renderDisplayName() {
+        return (
+            <div className = 'display-name'>
+                { this.props.message.displayName }
+            </div>
+        );
+    }
+
+    /**
+     * Renders the time at which the message was sent.
+     *
+     * @returns {React$Element<*>}
+     */
+    _renderTimestamp() {
+        return (
+            <div className = 'timestamp'>
+                { this._getFormattedTimestamp() }
             </div>
         );
     }
 }
 
-export default translate(ChatMessage, { wait: false });
+export default translate(ChatMessage);

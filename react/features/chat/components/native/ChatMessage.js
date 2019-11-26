@@ -3,25 +3,12 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-import { getLocalizedDateFormatter, translate } from '../../../base/i18n';
-import { Avatar } from '../../../base/participants';
-import { connect } from '../../../base/redux';
+import { Avatar } from '../../../base/avatar';
+import { translate } from '../../../base/i18n';
+import { Linkify } from '../../../base/react';
 
-import AbstractChatMessage, {
-    _mapStateToProps,
-    type Props
-} from '../AbstractChatMessage';
+import AbstractChatMessage, { type Props } from '../AbstractChatMessage';
 import styles from './styles';
-
-/**
- * Size of the rendered avatar in the message.
- */
-const AVATAR_SIZE = 32;
-
-/**
- * Formatter string to display the message timestamp.
- */
-const TIMESTAMP_FORMAT = 'H:mm';
 
 /**
  * Renders a single chat message.
@@ -34,8 +21,6 @@ class ChatMessage extends AbstractChatMessage<Props> {
      */
     render() {
         const { message } = this.props;
-        const timeStamp = getLocalizedDateFormatter(
-            new Date(message.timestamp)).format(TIMESTAMP_FORMAT);
         const localMessage = message.messageType === 'local';
 
         // Style arrays that need to be updated in various scenarios, such as
@@ -58,37 +43,33 @@ class ChatMessage extends AbstractChatMessage<Props> {
             textWrapperStyle.push(styles.systemTextWrapper);
         }
 
+        const messageText = message.messageType === 'error'
+            ? this.props.t('chat.error', {
+                error: message.error,
+                originalText: message.message
+            })
+            : message.message;
+
         return (
             <View style = { styles.messageWrapper } >
-                {
-
-                    // Avatar is only rendered for remote messages.
-                    !localMessage && this._renderAvatar()
-                }
+                { this._renderAvatar() }
                 <View style = { detailsWrapperStyle }>
                     <View style = { textWrapperStyle } >
                         {
-
-                            // Display name is only rendered for remote
-                            // messages.
-                            !localMessage && this._renderDisplayName()
+                            this.props.showDisplayName
+                                && this._renderDisplayName()
                         }
-                        <Text style = { styles.messageText }>
-                            { message.messageType === 'error'
-                                ? this.props.t('chat.error', {
-                                    error: message.error,
-                                    originalText: message.message
-                                })
-                                : message.message }
-                        </Text>
+                        <Linkify linkStyle = { styles.chatLink }>
+                            { messageText }
+                        </Linkify>
                     </View>
-                    <Text style = { styles.timeText }>
-                        { timeStamp }
-                    </Text>
+                    { this.props.showTimestamp && this._renderTimestamp() }
                 </View>
             </View>
         );
     }
+
+    _getFormattedTimestamp: () => string;
 
     /**
      * Renders the avatar of the sender.
@@ -96,13 +77,15 @@ class ChatMessage extends AbstractChatMessage<Props> {
      * @returns {React$Element<*>}
      */
     _renderAvatar() {
-        const { _avatarURL } = this.props;
+        const { message } = this.props;
 
         return (
             <View style = { styles.avatarWrapper }>
-                <Avatar
-                    size = { AVATAR_SIZE }
-                    uri = { _avatarURL } />
+                { this.props.showAvatar && <Avatar
+                    displayName = { message.displayName }
+                    participantId = { message.id }
+                    size = { styles.avatarWrapper.width } />
+                }
             </View>
         );
     }
@@ -113,14 +96,25 @@ class ChatMessage extends AbstractChatMessage<Props> {
      * @returns {React$Element<*>}
      */
     _renderDisplayName() {
-        const { message } = this.props;
-
         return (
             <Text style = { styles.displayName }>
-                { message.displayName }
+                { this.props.message.displayName }
+            </Text>
+        );
+    }
+
+    /**
+     * Renders the time at which the message was sent.
+     *
+     * @returns {React$Element<*>}
+     */
+    _renderTimestamp() {
+        return (
+            <Text style = { styles.timeText }>
+                { this._getFormattedTimestamp() }
             </Text>
         );
     }
 }
 
-export default translate(connect(_mapStateToProps)(ChatMessage));
+export default translate(ChatMessage);

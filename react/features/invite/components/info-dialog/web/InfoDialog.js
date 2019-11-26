@@ -13,7 +13,11 @@ import {
     getLocalParticipant
 } from '../../../../base/participants';
 
-import { _getDefaultPhoneNumber, getDialInfoPageURL } from '../../../functions';
+import {
+    _decodeRoomURI,
+    _getDefaultPhoneNumber,
+    getDialInfoPageURL
+} from '../../../functions';
 import DialInNumber from './DialInNumber';
 import PasswordForm from './PasswordForm';
 
@@ -39,6 +43,11 @@ type Props = {
      * The name of the current conference. Used as part of inviting users.
      */
     _conferenceName: string,
+
+    /**
+     * The number of digits to be used in the password.
+     */
+    _passwordNumberOfDigits: ?number,
 
     /**
      * The current url of the conference to be copied onto the clipboard.
@@ -232,7 +241,7 @@ class InfoDialog extends Component<Props, State> {
                                 className = 'info-dialog-url-text'
                                 href = { this.props._inviteURL }
                                 onClick = { this._onClickURLText } >
-                                { this._getURLToDisplay() }
+                                { decodeURI(this._getURLToDisplay()) }
                             </a>
                         </span>
                     </div>
@@ -245,7 +254,8 @@ class InfoDialog extends Component<Props, State> {
                             editEnabled = { this.state.passwordEditEnabled }
                             locked = { this.props._locked }
                             onSubmit = { this._onPasswordSubmit }
-                            password = { this.props._password } />
+                            password = { this.props._password }
+                            passwordNumberOfDigits = { this.props._passwordNumberOfDigits } />
                     </div>
                     <div className = 'info-dialog-action-links'>
                         <div className = 'info-dialog-action-link'>
@@ -283,18 +293,6 @@ class InfoDialog extends Component<Props, State> {
     }
 
     /**
-     * Generates the URL for the static dial in info page.
-     *
-     * @private
-     * @returns {string}
-     */
-    _getDialInfoPageURL() {
-        return getDialInfoPageURL(
-            encodeURIComponent(this.props._conferenceName),
-            this.props._locationURL);
-    }
-
-    /**
      * Creates a message describing how to dial in to the conference.
      *
      * @private
@@ -303,18 +301,14 @@ class InfoDialog extends Component<Props, State> {
     _getTextToCopy() {
         const { _localParticipant, liveStreamViewURL, t } = this.props;
         const shouldDisplayDialIn = this._shouldDisplayDialIn();
-        const moreInfo
-            = shouldDisplayDialIn
-                ? t('info.inviteURLMoreInfo', { conferenceID: this.props.dialIn.conferenceID })
-                : '';
+        const _inviteURL = _decodeRoomURI(this.props._inviteURL);
 
         let invite = _localParticipant && _localParticipant.name
             ? t('info.inviteURLFirstPartPersonal', { name: _localParticipant.name })
             : t('info.inviteURLFirstPartGeneral');
 
         invite += t('info.inviteURLSecondPart', {
-            url: this.props._inviteURL,
-            moreInfo
+            url: _inviteURL
         });
 
         if (liveStreamViewURL) {
@@ -331,7 +325,11 @@ class InfoDialog extends Component<Props, State> {
                 conferenceID: this.props.dialIn.conferenceID
             });
             const moreNumbers = t('info.invitePhoneAlternatives', {
-                url: this._getDialInfoPageURL()
+                url: getDialInfoPageURL(
+                    this.props._conferenceName,
+                    this.props._locationURL
+                ),
+                silentUrl: `${_inviteURL}#config.startSilent=true`
             });
 
             invite = `${invite}\n${dial}\n${moreNumbers}`;
@@ -455,7 +453,12 @@ class InfoDialog extends Component<Props, State> {
                     phoneNumber = { this.state.phoneNumber } />
                 <a
                     className = 'more-numbers'
-                    href = { this._getDialInfoPageURL() }
+                    href = {
+                        getDialInfoPageURL(
+                            this.props._conferenceName,
+                            this.props._locationURL
+                        )
+                    }
                     rel = 'noopener noreferrer'
                     target = '_blank'>
                     { this.props.t('info.moreNumbers') }
@@ -591,6 +594,7 @@ function _mapStateToProps(state) {
         _canEditPassword: isLocalParticipantModerator(state, state['features/base/config'].lockRoomGuestEnabled),
         _conference: conference,
         _conferenceName: room,
+        _passwordNumberOfDigits: state['features/base/config'].roomPasswordNumberOfDigits,
         _inviteURL: getInviteURL(state),
         _localParticipant: getLocalParticipant(state),
         _locationURL: state['features/base/connection'].locationURL,

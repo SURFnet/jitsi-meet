@@ -1,5 +1,7 @@
 // @flow
 
+import debounce from 'lodash/debounce';
+
 import {
     VIDEO_QUALITY_LEVELS,
     setMaxReceiverVideoQuality
@@ -13,7 +15,12 @@ import { selectParticipant } from '../large-video';
 import { shouldDisplayTileView } from './functions';
 import { setParticipantsWithScreenShare } from './actions';
 
+declare var APP: Object;
 declare var interfaceConfig: Object;
+
+// TODO: interfaceConfig should be in redux so we didn't have to do this.
+const AUTO_PIN_LATEST_SCREEN_SHARE
+    = typeof interfaceConfig === 'object' ? interfaceConfig.AUTO_PIN_LATEST_SCREEN_SHARE : 'remote-only';
 
 /**
  * StateListenerRegistry provides a reliable way of detecting changes to
@@ -30,8 +37,7 @@ StateListenerRegistry.register(
             dispatch(
                 setMaxReceiverVideoQuality(VIDEO_QUALITY_LEVELS.HIGH));
 
-            if (typeof interfaceConfig === 'object'
-                && interfaceConfig.AUTO_PIN_LATEST_SCREEN_SHARE) {
+            if (AUTO_PIN_LATEST_SCREEN_SHARE) {
                 _updateAutoPinnedParticipant(store);
             }
         }
@@ -40,13 +46,13 @@ StateListenerRegistry.register(
 
 /**
  * For auto-pin mode, listen for changes to the known media tracks and look
- * for updates to screen shares.
+ * for updates to screen shares. The listener is debounced to avoid state
+ * thrashing that might occur, especially when switching in or out of p2p.
  */
 StateListenerRegistry.register(
     /* selector */ state => state['features/base/tracks'],
-    /* listener */ (tracks, store) => {
-        if (typeof interfaceConfig !== 'object'
-            || !interfaceConfig.AUTO_PIN_LATEST_SCREEN_SHARE) {
+    /* listener */ debounce((tracks, store) => {
+        if (!AUTO_PIN_LATEST_SCREEN_SHARE) {
             return;
         }
 
@@ -54,7 +60,12 @@ StateListenerRegistry.register(
             = store.getState()['features/video-layout'].screenShares || [];
         const knownSharingParticipantIds = tracks.reduce((acc, track) => {
             if (track.mediaType === 'video' && track.videoType === 'desktop') {
-                acc.push(track.participantId);
+                const skipTrack
+                    = AUTO_PIN_LATEST_SCREEN_SHARE === 'remote-only' && track.local;
+
+                if (!skipTrack) {
+                    acc.push(track.participantId);
+                }
             }
 
             return acc;
@@ -80,8 +91,7 @@ StateListenerRegistry.register(
 
             _updateAutoPinnedParticipant(store);
         }
-    }
-);
+    }, 100));
 
 /**
  * Private helper to automatically pin the latest screen share stream or unpin

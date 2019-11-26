@@ -14,6 +14,8 @@ import {
     dominantSpeakerChanged,
     getNormalizedDisplayName,
     participantConnectionStatusChanged,
+    participantKicked,
+    participantMutedUs,
     participantPresenceChanged,
     participantRoleChanged,
     participantUpdated
@@ -33,10 +35,8 @@ import {
     KICKED_OUT,
     LOCK_STATE_CHANGED,
     P2P_STATUS_CHANGED,
-    SET_AUDIO_ONLY,
     SET_DESKTOP_SHARING_ENABLED,
     SET_FOLLOW_ME,
-    SET_LASTN,
     SET_MAX_RECEIVER_VIDEO_QUALITY,
     SET_PASSWORD,
     SET_PASSWORD_FAILED,
@@ -84,10 +84,16 @@ function _addConferenceListeners(conference, dispatch) {
     conference.on(
         JitsiConferenceEvents.CONFERENCE_LEFT,
         (...args) => dispatch(conferenceLeft(conference, ...args)));
+    conference.on(JitsiConferenceEvents.SUBJECT_CHANGED,
+        (...args) => dispatch(conferenceSubjectChanged(...args)));
 
     conference.on(
         JitsiConferenceEvents.KICKED,
-        () => dispatch(kickedOut(conference)));
+        (...args) => dispatch(kickedOut(conference, ...args)));
+
+    conference.on(
+        JitsiConferenceEvents.PARTICIPANT_KICKED,
+        (kicker, kicked) => dispatch(participantKicked(kicker, kicked)));
 
     conference.on(
         JitsiConferenceEvents.LOCK_STATE_CHANGED,
@@ -126,6 +132,14 @@ function _addConferenceListeners(conference, dispatch) {
     conference.on(
         JitsiConferenceEvents.TRACK_REMOVED,
         t => t && !t.isLocal() && dispatch(trackRemoved(t)));
+
+    conference.on(
+        JitsiConferenceEvents.TRACK_MUTE_CHANGED,
+        (_, participantThatMutedUs) => {
+            if (participantThatMutedUs) {
+                dispatch(participantMutedUs(participantThatMutedUs));
+            }
+        });
 
     // Dispatches into features/base/participants follow:
     conference.on(
@@ -377,7 +391,8 @@ export function createConference() {
                 room.toLowerCase(), {
                     ...state['features/base/config'],
                     applicationName: getName(),
-                    getWiFiStatsMethod: getJitsiMeetGlobalNS().getWiFiStats
+                    getWiFiStatsMethod: getJitsiMeetGlobalNS().getWiFiStats,
+                    confID: `${locationURL.host}${locationURL.pathname}`
                 });
 
         connection[JITSI_CONNECTION_CONFERENCE_KEY] = conference;
@@ -430,15 +445,19 @@ export function dataChannelOpened() {
  *
  * @param {JitsiConference} conference - The {@link JitsiConference} instance
  * for which the event is being signaled.
+ * @param {JitsiParticipant} participant - The {@link JitsiParticipant}
+ * instance which initiated the kick event.
  * @returns {{
  *     type: KICKED_OUT,
- *     conference: JitsiConference
+ *     conference: JitsiConference,
+ *     participant: JitsiParticipant
  * }}
  */
-export function kickedOut(conference: Object) {
+export function kickedOut(conference: Object, participant: Object) {
     return {
         type: KICKED_OUT,
-        conference
+        conference,
+        participant
     };
 }
 
@@ -502,29 +521,6 @@ export function p2pStatusChanged(p2p: boolean) {
 }
 
 /**
- * Sets the audio-only flag for the current JitsiConference.
- *
- * @param {boolean} audioOnly - True if the conference should be audio only;
- * false, otherwise.
- * @param {boolean} ensureVideoTrack - Define if conference should ensure
- * to create a video track.
- * @returns {{
- *     type: SET_AUDIO_ONLY,
- *     audioOnly: boolean,
- *     ensureVideoTrack: boolean
- * }}
- */
-export function setAudioOnly(
-        audioOnly: boolean,
-        ensureVideoTrack: boolean = false) {
-    return {
-        type: SET_AUDIO_ONLY,
-        audioOnly,
-        ensureVideoTrack
-    };
-}
-
-/**
  * Sets the flag for indicating if desktop sharing is enabled.
  *
  * @param {boolean} desktopSharingEnabled - True if desktop sharing is enabled.
@@ -553,35 +549,6 @@ export function setFollowMe(enabled: boolean) {
     return {
         type: SET_FOLLOW_ME,
         enabled
-    };
-}
-
-/**
- * Sets the video channel's last N (value) of the current conference. A value of
- * undefined shall be used to reset it to the default value.
- *
- * @param {(number|undefined)} lastN - The last N value to be set.
- * @returns {Function}
- */
-export function setLastN(lastN: ?number) {
-    return (dispatch: Dispatch<any>, getState: Function) => {
-        if (typeof lastN === 'undefined') {
-            const config = getState()['features/base/config'];
-
-            /* eslint-disable no-param-reassign */
-
-            lastN = config.channelLastN;
-            if (typeof lastN === 'undefined') {
-                lastN = -1;
-            }
-
-            /* eslint-enable no-param-reassign */
-        }
-
-        dispatch({
-            type: SET_LASTN,
-            lastN
-        });
     };
 }
 
@@ -734,19 +701,6 @@ export function setStartMutedPolicy(
 }
 
 /**
- * Toggles the audio-only flag for the current JitsiConference.
- *
- * @returns {Function}
- */
-export function toggleAudioOnly() {
-    return (dispatch: Dispatch<any>, getState: Function) => {
-        const { audioOnly } = getState()['features/base/conference'];
-
-        return dispatch(setAudioOnly(!audioOnly, true));
-    };
-}
-
-/**
  * Changing conference subject.
  *
  * @param {string} subject - The new subject.
@@ -757,10 +711,6 @@ export function setSubject(subject: string = '') {
         const { conference } = getState()['features/base/conference'];
 
         if (conference) {
-            dispatch({
-                type: SET_PENDING_SUBJECT_CHANGE,
-                subject: undefined
-            });
             conference.setSubject(subject);
         } else {
             dispatch({
