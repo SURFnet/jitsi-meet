@@ -548,6 +548,7 @@
             "chat": "Chatvenster schakelen",
             "document": "Gedeeld document schakelen",
             "feedback": "Feedback achterlaten",
+            "manual": "Handleiding (PDF)",
             "fullScreen": "Volledig scherm schakelen",
             "hangup": "Het gesprek verlaten",
             "invite": "Personen uitnodigen",
@@ -686,7 +687,8 @@
             "join": "Tik om deel te nemen",
             "roomname": "Naam van ruimte invoeren"
         },
-        "appDescription": "U kunt nu videochatten met het hele team. U kunt uitnodigen wie u maar wilt. {{app}} is een volledig versleutelde, 100% open-sourceoplossing voor videovergaderingen die u wanneer en zo lang u maar wilt gratis kunt gebruiken. Hier hebt u geen account voor nodig.",
+        "appDescription": "Met deze tool kun je videobellen zonder poespas. Meer dan een browser met <a href='https://webrtc.org/'>webRTC ondersteuning</a> heb je niet nodig. Dus géén software downloaden, géén addons, géén licentie, en je gasten hoeven ook niet in te loggen.",
+                "appAbout": "Pilot SURF Videobellen is gebaseerd op JitsiMeet: een 100% open source, volledig encrypte videoconference oplossing. De privacy verklaring voor deze pilot kun je <a href='https://edu.nl/83qfg'>hier</a> vinden. Er is ook een <a href='/static/Handleiding%20SURFvideobellen%20NL%20(20190705).pdf' target='_blank'>handleiding</a> beschikbaar. Feedback? We horen het graag via <a href='mailto:meet@surf.nl'>meet@surf.nl</a>.",
         "audioVideoSwitch": {
             "audio": "Spraak",
             "video": "Video"
@@ -707,6 +709,7 @@
         "roomnameHint": "Voer de naam of URL in van de ruimte die u wilt betreden. U kunt een naam verzinnen, maar geef de naam wel door aan de andere deelnemers, zodat zij dezelfde naam kunnen invoeren.",
         "sendFeedback": "Feedback verzenden",
         "terms": "Voorwaarden",
-        "title": "Veilige, volledig uitgeruste en geheel gratis videovergaderingen"
+        "title": "Veiligheid, Privacy en Gebruiksgemak.",
+        "subtitle": "Welkom bij de pilot SURF Videobellen."
     }
 }
