@@ -133,10 +133,11 @@ class WelcomePage extends AbstractWelcomePage {
                         <h1 className = 'header-text-title'>
                             { t('welcomepage.title') }
                         </h1>
-                        <p className = 'header-text-subtitle'>
-                            { t('welcomepage.subtitle',
-                                { app: APP_NAME }) }
-                        </p>
+                        <p
+                            className = 'header-text-subtitle'
+                            // eslint-disable-next-line react/no-danger
+                            dangerouslySetInnerHTML = {{ __html: t('welcomepage.subtitle',
+                                { app: APP_NAME }) }} />
                         <p
                             className = 'header-text-description'
                             // eslint-disable-next-line react/no-danger
