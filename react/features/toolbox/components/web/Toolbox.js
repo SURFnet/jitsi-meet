@@ -12,6 +12,7 @@ import { openDialog, toggleDialog } from '../../../base/dialog';
 import { translate } from '../../../base/i18n';
 import {
     IconChat,
+    IconEnvelope,
     IconExitFullScreen,
     IconFeedback,
     IconFullScreen,
@@ -21,6 +22,7 @@ import {
     IconRaisedHand,
     IconRec,
     IconShareDesktop,
+    IconShareDoc,
     IconShareVideo
 } from '../../../base/icons';
 import {
@@ -998,14 +1000,14 @@ class Toolbox extends Component<Props, State> {
             <OverflowMenuItem
                 accessibilityLabel =
                     { t('toolbar.accessibilityLabel.manual') }
-                icon = 'icon-share-doc'
+                icon = { IconShareDoc }
                 key = 'manual'
                 onClick = { this._onToolbarOpenManual }
                 text = { t('toolbar.manual') } />,
             <OverflowMenuItem
                 accessibilityLabel =
                     { t('toolbar.accessibilityLabel.contactSupport') }
-                icon = 'icon-envelop'
+                icon = { IconEnvelope }
                 key = 'contactSupport'
                 onClick = { this._onToolbarContactSupport }
                 text = { t('toolbar.contactSupport') } />,
