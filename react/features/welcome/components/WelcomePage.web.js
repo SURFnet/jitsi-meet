@@ -198,6 +198,10 @@ class WelcomePage extends AbstractWelcomePage {
                             className = 'header-text-about'
                             // eslint-disable-next-line react/no-danger
                             dangerouslySetInnerHTML = {{ __html: t('welcomepage.appAbout') }} />
+                        <p
+                            className = 'header-text-about'
+                            // eslint-disable-next-line react/no-danger
+                            dangerouslySetInnerHTML = {{ __html: t('welcomepage.troubleshooting') }} />
                     </div>
                     <div id = 'enter_room'>
                         <div className = 'enter-room-input-container'>

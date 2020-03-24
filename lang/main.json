@@ -752,8 +752,9 @@
         "roomname": "Enter room name",
         "roomnameHint": "Enter the name or URL of the room you want to join. You may make a name up, just let the people you are meeting know it so that they enter the same name.",
         "sendFeedback": "Send feedback",
+        "subtitle": "Welcome to the SURF Videoconferencing pilot.<br/><br/>We'd like to hear what you think of the pilot. There is now a survey (in Dutch) about this pilot available, it will only take you 5 minutes and participation is anonymous. Please click <a href='https://survey.surfnet.nl/index.php/776343?lang=nl' target='_blank'>here</a>. Your input is very much appreciated!",
         "terms": "Terms",
         "title": "Security, privacy and easy to use.",
-        "subtitle": "Welcome to the SURF Videoconferencing pilot.<br/><br/>We'd like to hear what you think of the pilot. There is now a survey (in Dutch) about this pilot available, it will only take you 5 minutes and participation is anonymous. Please click <a href='https://survey.surfnet.nl/index.php/776343?lang=nl' target='_blank'>here</a>. Your input is very much appreciated!"
+        "troubleshooting": "Troubles? Check our <a href='https://wiki.surfnet.nl/display/JITSI/Troubleshooting'>Troubleshooter</a>."
     }
 }
