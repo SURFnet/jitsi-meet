@@ -47,8 +47,10 @@
     },
     "chat": {
         "error": "Error: your message was not sent. Reason: {{error}}",
+        "fieldPlaceHolder": "Type your message here",
         "messagebox": "Type a message",
         "messageTo": "Private message to {{recipient}}",
+        "noMessagesMessage": "There are no messages in the meeting yet. Start a conversation here!",
         "nickname": {
             "popover": "Choose a nickname",
             "title": "Enter a nickname to use chat"
@@ -56,6 +58,11 @@
         "privateNotice": "Private message to {{recipient}}",
         "title": "Chat",
         "you": "you"
+    },
+    "chromeExtensionBanner": {
+        "installExtensionText": "Install the extension for Google Calendar and Office 365 integration",
+        "buttonText": "Install Chrome Extension",
+        "dontShowAgain": "Don’t show me this again"
     },
     "connectingOverlay": {
         "joiningRoom": "Connecting you to your meeting..."
@@ -73,9 +80,7 @@
         "FETCH_SESSION_ID": "Obtaining session-id...",
         "GET_SESSION_ID_ERROR": "Get session-id error: {{code}}",
         "GOT_SESSION_ID": "Obtaining session-id... Done",
-        "LOW_BANDWIDTH": "Video for {{displayName}} has been turned off to save bandwidth",
-        "RECONNECTING": "A network problem occurred. Reconnecting...",
-        "USER_CONNECTION_INTERRUPTED": "{{displayName}} is having connectivity issues..."
+        "LOW_BANDWIDTH": "Video for {{displayName}} has been turned off to save bandwidth"
     },
     "connectionindicator": {
         "address": "Address:",
@@ -204,6 +209,12 @@
         "micNotSendingDataTitle": "Your mic is muted by your system settings",
         "micPermissionDeniedError": "You have not granted permission to use your microphone. You can still join the conference but others won't hear you. Use the camera button in the address bar to fix this.",
         "micUnknownError": "Cannot use microphone for an unknown reason.",
+        "muteEveryoneElseDialog": "Once muted, you won't be able to unmute them, but they can unmute themselves at any time.",
+        "muteEveryoneElseTitle": "Mute everyone except {{whom}}?",
+        "muteEveryoneDialog": "Are you sure you want to mute everyone? You won't be able to unmute them, but they can unmute themselves at any time.",
+        "muteEveryoneTitle": "Mute everyone?",
+        "muteEveryoneSelf": "yourself",
+        "muteEveryoneStartMuted": "Everyone starts muted from now on",
         "muteParticipantBody": "You won't be able to unmute them, but they can unmute themselves at any time.",
         "muteParticipantButton": "Mute",
         "muteParticipantDialog": "Are you sure you want to mute this participant? You won't be able to unmute them, but they can unmute themselves at any time.",
@@ -275,7 +286,7 @@
     "dialOut": {
         "statusMessage": "is now {{status}}"
     },
-    "documentSharing" : {
+    "documentSharing": {
         "title": "Shared Document"
     },
     "feedback": {
@@ -587,7 +598,9 @@
             "manual": "Read the manual in a new tab",
             "moreActions": "Toggle more actions menu",
             "moreActionsMenu": "More actions menu",
+            "moreOptions": "Show more options",
             "mute": "Toggle mute audio",
+            "muteEveryone": "Mute everyone",
             "pip": "Toggle Picture-in-Picture mode",
             "privateMessage": "Send private message",
             "profile": "Edit your profile",
@@ -634,7 +647,16 @@
         "logout": "Logout",
         "lowerYourHand": "Lower your hand",
         "moreActions": "More actions",
+        "moreOptions": "More options",
         "mute": "Mute / Unmute",
+        "muteEveryone": "Mute everyone",
+        "noAudioSignalTitle": "There is no input coming from your mic!",
+        "noAudioSignalDesc": "If you did not purposely mute it from system settings or hardware, consider switching the device.",
+        "noAudioSignalDescSuggestion": "If you did not purposely mute it from system settings or hardware, consider switching to the suggested device.",
+        "noAudioSignalDialInDesc": "You can also dial-in using:",
+        "noAudioSignalDialInLinkDesc" : "Dial-in numbers",
+        "noisyAudioInputTitle": "Your microphone appears to be noisy!",
+        "noisyAudioInputDesc": "It sounds like your microphone is making noise, please consider muting or changing the device.",
         "openChat": "Open chat",
         "pip": "Enter Picture-in-Picture mode",
         "privateMessage": "Send private message",
@@ -715,12 +737,13 @@
     },
     "videothumbnail": {
         "domute": "Mute",
+        "domuteOthers": "Mute everyone else",
         "flip": "Flip",
         "kick": "Kick out",
         "moderator": "Moderator",
         "mute": "Participant is muted",
         "muted": "Muted",
-        "remoteControl": "Remote control",
+        "remoteControl": "Start / Stop remote control",
         "show": "Show on stage",
         "videomute": "Participant has stopped the camera"
     },
@@ -742,7 +765,7 @@
         "roomNameAllowedChars": "Meeting name should not contain any of these characters: ?, &, :, ', \", %, #.",
         "go": "GO",
         "goSmall": "GO",
-        "join": "JOIN",
+        "join": "CREATE / JOIN",
         "info": "Info",
         "privacy": "Privacy",
         "recentList": "Recent",
@@ -756,5 +779,9 @@
         "terms": "Terms",
         "title": "Security, privacy and easy to use.",
         "troubleshooting": "Troubles? Check our <a href='https://wiki.surfnet.nl/display/JITSI/Troubleshooting'>Troubleshooter</a>."
+    },
+    "lonelyMeetingExperience": {
+        "button": "Invite others",
+        "youAreAlone": "You are the only one in the meeting"
     }
 }

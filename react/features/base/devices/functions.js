@@ -4,6 +4,8 @@ import { parseURLParams } from '../config';
 import JitsiMeetJS from '../lib-jitsi-meet';
 import { updateSettings } from '../settings';
 
+import logger from './logger';
+
 declare var APP: Object;
 
 /**
@@ -140,6 +142,39 @@ export function groupDevicesByKind(devices: Object[]): Object {
 }
 
 /**
+ * Filters audio devices from a list of MediaDeviceInfo objects.
+ *
+ * @param {Array<MediaDeviceInfo>} devices - Unfiltered media devices.
+ * @private
+ * @returns {Array<MediaDeviceInfo>} Filtered audio devices.
+ */
+export function filterAudioDevices(devices: Object[]): Object {
+    return devices.filter(device => device.kind === 'audioinput');
+}
+
+/**
+ * We want to strip any device details that are not very user friendly, like usb ids put in brackets at the end.
+ *
+ * @param {string} label - Device label to format.
+ *
+ * @returns {string} - Formatted string.
+ */
+export function formatDeviceLabel(label: string) {
+
+    let formattedLabel = label;
+
+    // Remove braked description at the end as it contains non user friendly strings i.e.
+    // Microsoft® LifeCam HD-3000 (045e:0779:31dg:d1231)
+    const ix = formattedLabel.lastIndexOf('(');
+
+    if (ix !== -1) {
+        formattedLabel = formattedLabel.substr(0, ix);
+    }
+
+    return formattedLabel;
+}
+
+/**
  * Set device id of the audio output device which is currently in use.
  * Empty string stands for default device.
  *
@@ -154,6 +189,9 @@ export function setAudioOutputDeviceId(
         dispatch: Function,
         userSelection: boolean = false,
         newLabel: ?string): Promise<*> {
+
+    logger.debug(`setAudioOutputDevice: ${String(newLabel)}[${newId}]`);
+
     return JitsiMeetJS.mediaDevices.setAudioOutputDevice(newId)
         .then(() => {
             const newSettings = {

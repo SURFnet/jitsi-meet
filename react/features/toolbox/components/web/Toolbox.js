@@ -30,7 +30,7 @@ import {
     getParticipants,
     participantUpdated
 } from '../../../base/participants';
-import { connect } from '../../../base/redux';
+import { connect, equals } from '../../../base/redux';
 import { OverflowMenuItem } from '../../../base/toolbox';
 import { getLocalVideoTrack, toggleScreensharing } from '../../../base/tracks';
 import { VideoBlurButton } from '../../../blur';
@@ -59,7 +59,10 @@ import {
 } from '../../../settings';
 import { toggleSharedVideo } from '../../../shared-video';
 import { SpeakerStats } from '../../../speaker-stats';
-import { TileViewButton } from '../../../video-layout';
+import {
+    TileViewButton,
+    toggleTileView
+} from '../../../video-layout';
 import {
     OverflowMenuVideoQualityItem,
     VideoQualityDialog
@@ -77,6 +80,7 @@ import HangupButton from '../HangupButton';
 import HelpButton from '../HelpButton';
 import OverflowMenuButton from './OverflowMenuButton';
 import OverflowMenuProfileItem from './OverflowMenuProfileItem';
+import MuteEveryoneButton from './MuteEveryoneButton';
 import ToolbarButton from './ToolbarButton';
 import VideoMuteButton from '../VideoMuteButton';
 import {
@@ -123,6 +127,11 @@ type Props = {
      * Whether or not the app is currently in full screen.
      */
     _fullScreen: boolean,
+
+    /**
+     * Whether or not the tile view is enabled.
+     */
+    _tileViewEnabled: boolean,
 
     /**
      * Whether or not invite should be hidden, regardless of feature
@@ -200,6 +209,10 @@ type State = {
 declare var APP: Object;
 declare var interfaceConfig: Object;
 
+// XXX: We are not currently using state here, but in the future, when
+// interfaceConfig is part of redux we will. This will have to be retrieved from the store.
+const visibleButtons = new Set(interfaceConfig.TOOLBAR_BUTTONS);
+
 /**
  * Implements the conference toolbox on React/Web.
  *
@@ -240,6 +253,7 @@ class Toolbox extends Component<Props, State> {
         this._onToolbarToggleScreenshare = this._onToolbarToggleScreenshare.bind(this);
         this._onToolbarToggleSharedVideo = this._onToolbarToggleSharedVideo.bind(this);
         this._onToolbarOpenLocalRecordingInfoDialog = this._onToolbarOpenLocalRecordingInfoDialog.bind(this);
+        this._onShortcutToggleTileView = this._onShortcutToggleTileView.bind(this);
 
         this.state = {
             windowWidth: window.innerWidth
@@ -278,6 +292,11 @@ class Toolbox extends Component<Props, State> {
                 character: 'S',
                 exec: this._onShortcutToggleFullScreen,
                 helpDescription: 'keyboardShortcuts.fullScreen'
+            },
+            this._shouldShowButton('tileview') && {
+                character: 'W',
+                exec: this._onShortcutToggleTileView,
+                helpDescription: 'toolbar.tileViewToggle'
             }
         ];
 
@@ -479,6 +498,16 @@ class Toolbox extends Component<Props, State> {
         this.props.dispatch(toggleDialog(VideoQualityDialog));
     }
 
+    /**
+     * Dispaches an action to toggle tile view.
+     *
+     * @private
+     * @returns {void}
+     */
+    _doToggleTileView() {
+        this.props.dispatch(toggleTileView());
+    }
+
     _onMouseOut: () => void;
 
     /**
@@ -567,6 +596,24 @@ class Toolbox extends Component<Props, State> {
         sendAnalytics(createShortcutEvent('video.quality'));
 
         this._doToggleVideoQuality();
+    }
+
+    _onShortcutToggleTileView: () => void;
+
+    /**
+     * Dispatches an action for toggling the tile view.
+     *
+     * @private
+     * @returns {void}
+     */
+    _onShortcutToggleTileView() {
+        sendAnalytics(createShortcutEvent(
+            'toggle.tileview',
+            {
+                enable: !this.props._tileViewEnabled
+            }));
+
+        this._doToggleTileView();
     }
 
     _onShortcutToggleFullScreen: () => void;
@@ -982,6 +1029,10 @@ class Toolbox extends Component<Props, State> {
                 key = 'settings'
                 showLabel = { true }
                 visible = { this._shouldShowButton('settings') } />,
+            <MuteEveryoneButton
+                key = 'mute-everyone'
+                showLabel = { true }
+                visible = { this._shouldShowButton('mute-everyone') } />,
             this._shouldShowButton('stats')
                 && <OverflowMenuItem
                     accessibilityLabel = { t('toolbar.accessibilityLabel.speakerStats') }
@@ -1326,6 +1377,10 @@ function _mapStateToProps(state) {
         }
     }
 
+    // NB: We compute the buttons again here because if URL parameters were used to
+    // override them we'd miss it.
+    const buttons = new Set(interfaceConfig.TOOLBAR_BUTTONS);
+
     return {
         _chatOpen: state['features/chat'].isOpen,
         _conference: conference,
@@ -1337,6 +1392,7 @@ function _mapStateToProps(state) {
             iAmRecorder || (!addPeopleEnabled && !dialOutEnabled),
         _isGuest: state['features/base/jwt'].isGuest,
         _fullScreen: fullScreen,
+        _tileViewEnabled: state['features/video-layout'].tileViewEnabled,
         _localParticipantID: localParticipant.id,
         _localRecState: localRecordingStates,
         _overflowMenuVisible: overflowMenuVisible,
@@ -1346,10 +1402,7 @@ function _mapStateToProps(state) {
             || sharedVideoStatus === 'start'
             || sharedVideoStatus === 'pause',
         _visible: isToolboxVisible(state),
-
-        // XXX: We are not currently using state here, but in the future, when
-        // interfaceConfig is part of redux we will.
-        _visibleButtons: new Set(interfaceConfig.TOOLBAR_BUTTONS)
+        _visibleButtons: equals(visibleButtons, buttons) ? visibleButtons : buttons
     };
 }
 

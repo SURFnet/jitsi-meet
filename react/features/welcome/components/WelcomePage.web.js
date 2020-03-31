@@ -3,8 +3,9 @@
 import React from 'react';
 
 import { translate } from '../../base/i18n';
-import { Platform, Watermarks } from '../../base/react';
+import { Watermarks } from '../../base/react';
 import { connect } from '../../base/redux';
+import { isMobileBrowser } from '../../base/environment/utils';
 import { CalendarList } from '../../calendar-sync';
 import { RecentList } from '../../recent-list';
 import { SettingsButton, SETTINGS_TABS } from '../../settings';
@@ -116,6 +117,8 @@ class WelcomePage extends AbstractWelcomePage {
      * @returns {void}
      */
     componentDidMount() {
+        super.componentDidMount();
+
         document.body.classList.add('welcome-page');
         document.title = interfaceConfig.APP_NAME;
 
@@ -292,10 +295,7 @@ class WelcomePage extends AbstractWelcomePage {
      * @returns {ReactElement|null}
      */
     _renderTabs() {
-        const isMobileBrowser
-            = Platform.OS === 'android' || Platform.OS === 'ios';
-
-        if (isMobileBrowser) {
+        if (isMobileBrowser()) {
             return null;
         }
 

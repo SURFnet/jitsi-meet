@@ -185,6 +185,23 @@ export function createRecentClickedEvent(eventName, attributes = {}) {
 }
 
 /**
+ * Creates an event which indicate an action occured in the chrome extension banner.
+ *
+ * @param {boolean} installPressed - Whether the user pressed install or `x` - cancel.
+ * @param {Object} attributes - Attributes to attach to the event.
+ * @returns {Object} The event in a format suitable for sending via
+ * sendAnalytics.
+ */
+export function createChromeExtensionBannerEvent(installPressed, attributes = {}) {
+    return {
+        action: installPressed ? 'install' : 'cancel',
+        attributes,
+        source: 'chrome.extension.banner',
+        type: TYPE_UI
+    };
+}
+
+/**
  * Creates an event which indicates that the recent list container is shown and
  * selected.
  *
@@ -688,21 +705,6 @@ export function createSyncTrackStateEvent(mediaType, muted) {
         attributes: {
             'media_type': mediaType,
             muted
-        }
-    };
-}
-
-/**
- * Creates an event that indicates the thumbnail offset parent is null.
- *
- * @param {string} id - The id of the user related to the thumbnail.
- * @returns {Object} The event in a format suitable for sending via sendAnalytics.
- */
-export function createThumbnailOffsetParentIsNullEvent(id) {
-    return {
-        action: 'OffsetParentIsNull',
-        attributes: {
-            id
         }
     };
 }

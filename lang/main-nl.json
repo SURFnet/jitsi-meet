@@ -713,5 +713,9 @@
         "title": "Veiligheid, Privacy en Gebruiksgemak.",
         "subtitle": "Welkom bij de pilot SURF Videobellen.<br/><br/>We horen graag wat je van de pilot vindt. Er staat nu een enquête klaar over deze pilot, het kost je slechts 5 minuten en deelname is anoniem. Klik <a href='https://survey.surfnet.nl/index.php/776343?lang=nl' target='_blank'>hier</a>. Je input wordt zeer gewaardeerd!",
         "troubleshooting": "Problemen? Ga dan naar onze <a href='https://wiki.surfnet.nl/display/JITSI/Troubleshooting'>Troubleshooter</a>."
+    },
+    "lonelyMeetingExperience": {
+        "button": "Nodig anderen uit",
+        "youAreAlone": "Je bent de enige in deze vergadering"
     }
 }

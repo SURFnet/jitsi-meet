@@ -2,7 +2,7 @@
 
 Jitsi Meet is an open-source (Apache) WebRTC JavaScript application that uses [Jitsi Videobridge](https://jitsi.org/videobridge) to provide high quality, [secure](#security) and scalable video conferences. Jitsi Meet in action can be seen at [here at the session #482 of the VoIP Users Conference](http://youtu.be/7vFUVClsNh0).
 
-The Jitsi Meet client runs in your browser, without installing anything on your computer. You can try it out at https://meet.jit.si .
+The Jitsi Meet client runs in your browser, without installing anything else on your computer. You can try it out at https://meet.jit.si .
 
 Jitsi Meet allows very efficient collaboration. Users can stream their desktop or only some windows. It also supports shared document editing with Etherpad.
 
@@ -29,10 +29,17 @@ You can download source archives (produced by ```make source-package```):
 
 ### Mobile apps
 
-You can get our mobile versions from here:
-
 * [Android](https://play.google.com/store/apps/details?id=org.jitsi.meet)
+
+[<img src="resources/img/google-play-badge.png" height="50">](https://play.google.com/store/apps/details?id=org.jitsi.meet)
+
+* [Android (F-Droid)](https://f-droid.org/en/packages/org.jitsi.meet/)
+
+[<img src="resources/img/f-droid-badge.png" height="50">](https://f-droid.org/en/packages/org.jitsi.meet/)
+
 * [iOS](https://itunes.apple.com/us/app/jitsi-meet/id1165103905)
+
+[<img src="resources/img/appstore-badge.png" height="50">](https://itunes.apple.com/us/app/jitsi-meet/id1165103905)
 
 You can also sign up for our open beta testing here:
 
