@@ -696,7 +696,7 @@
             "join": "Tik om deel te nemen",
             "roomname": "Naam van ruimte invoeren"
         },
-        "appDescription": "Check onze <a href='https://wiki.surfnet.nl/x/RJTaAQ' target='_blank'>probleemoplosser</a> of <a href='https://wiki.surfnet.nl/x/C6faAQ' target='_blank'>handleiding</a> voor tips en trucs.<br>Privacy vinden wij belangrijk! De privacy verklaring voor deze pilot kun je <a href='https://edu.nl/83qfg'>hier</a> vinden. Er is ook een  beschikbaar.<br><br>Feedback? We horen het graag via <a href='mailto:meet@surf.nl'>meet@surf.nl</a>.",
+        "appDescription": "Check onze <a href='https://wiki.surfnet.nl/x/RJTaAQ' target='_blank'>probleemoplosser</a> of <a href='https://wiki.surfnet.nl/x/C6faAQ' target='_blank'>handleiding</a> voor tips en trucs.<br>Privacy vinden wij belangrijk! De privacy verklaring voor deze pilot kun je <a href='https://edu.nl/83qfg'>hier</a> vinden.<br><br>Feedback? We horen het graag via <a href='mailto:meet@surf.nl'>meet@surf.nl</a>.",
         "appAbout": "Pilot SURF Videobellen is gebaseerd op <a href='https://jitsi.org/' target='_blank'>Jitsi Meet</a>: een 100% open source, videoconference oplossing.",
         "audioVideoSwitch": {
             "audio": "Spraak",
