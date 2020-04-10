@@ -756,8 +756,8 @@
             "join": "Tap to join",
             "roomname": "Enter room name"
         },
-        "appDescription": "With this tool you can make video calls without fuss. All you need is a webbrowser that supports <a href='https://webrtc.org/'>webRTC</a>. So no software download, no addons, no license and your guests do not have to log in.",
-        "appAbout": "SURF Videoconferencing pilot is based on JitsiMeet: a 100% open source, fully encrypted video conference solution. The privacy statement for this pilot can be found <a href='https://edu.nl/83qfg'>here</a>. There is also a <a href='/static/Handleiding%20SURFvideobellen%20EN%20(20190705).pdf' target='_blank'>manual</a> available.",
+        "appDescription": "Check our <a href='https://wiki.surfnet.nl/x/RJTaAQ' target='_blank'>troubleshooter</a> or <a href='https://wiki.surfnet.nl/x/C6faAQ' target='_blank'>manual</a> for tips and tricks.<br>Privacy is important to us! You can find the privacy statement for this pilot <a href='https://edu.nl/83qfg' target='_blank'>here</a>.",
+        "appAbout": "SURF Videoconferencing pilot is based on <a href='https://jitsi.org/' target='_blank'>Jitsi Meet</a>: a 100% open source, fully encrypted video conference solution.",
         "audioVideoSwitch": {
             "audio": "Voice",
             "video": "Video"
@@ -780,10 +780,10 @@
         "roomname": "Enter room name",
         "roomnameHint": "Enter the name or URL of the room you want to join. You may make a name up, just let the people you are meeting know it so that they enter the same name.",
         "sendFeedback": "Send feedback",
-        "subtitle": "Welcome to the SURF Videoconferencing pilot.<br/><br/>We'd like to hear what you think of the pilot. There is now a survey (in Dutch) about this pilot available, it will only take you 5 minutes and participation is anonymous. Please click <a href='https://survey.surfnet.nl/index.php/776343?lang=nl' target='_blank'>here</a>. Your input is very much appreciated!",
+        "subtitle": "Welcome to the SURF Videoconferencing pilot.<br/><br/>With this tool you can make video calls without fuss. So no software download, no addons, no license and your guests do not have to log in. Video calling works best with the Chromium web browsers: Chrome, MS Edge (from v75), Brave and Opera.",
         "terms": "Terms",
         "title": "Security, privacy and easy to use.",
-        "troubleshooting": "Troubles? Check our <a href='https://wiki.surfnet.nl/display/JITSI/Troubleshooting'>Troubleshooter</a>."
+        "feedback": "Feedback? Please let us know via <a href='mailto:meet@surf.nl'>meet@surf.nl</a>.<br>SURF Videoconferencing pilot is based on JitsiMeet: a 100% open source,  video conference solution."
     },
     "lonelyMeetingExperience": {
         "button": "Invite others",
