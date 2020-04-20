@@ -179,7 +179,7 @@ var interfaceConfig = {
 
     // Browsers, in addition to those which do not fully support WebRTC, that
     // are not supported and should show the unsupported browser page.
-    UNSUPPORTED_BROWSERS: [ 'safari' ],
+    UNSUPPORTED_BROWSERS: [ ],
 
     /**
      * A UX mode where the last screen share participant is automatically
