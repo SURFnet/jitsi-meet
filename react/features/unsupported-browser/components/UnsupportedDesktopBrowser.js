@@ -45,7 +45,7 @@ class UnsupportedDesktopBrowser extends Component<Props> {
                     It looks like you're using a browser we don't support.
                 </h2>
                 <p className = { `${_SNS}__description` }>
-                    Please try again with one of our
+                    Please try again with one of our&nbsp;
                     <a href = '/static/recommendedBrowsers.html'>recommended browsers</a>.
                 </p>
             </div>
