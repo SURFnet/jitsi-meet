@@ -31,6 +31,10 @@ body.welcome-page {
             text-decoration: underline;
         }
 
+        a:link.survey-link, a:hover.survey-link, a:visited.survey-link {
+            color: darkblue;
+        }
+
         a:visited {
             color: $welcomePageTitleColor;
         }

@@ -771,7 +771,7 @@
             "join": "Tap to join",
             "roomname": "Enter room name"
         },
-        "appDescription": "Check our <a href='https://wiki.surfnet.nl/x/RJTaAQ' target='_blank'>troubleshooter</a> or <a href='https://wiki.surfnet.nl/x/C6faAQ' target='_blank'>manual</a> for tips and tricks.<br>Privacy is important to us! You can find the privacy statement for this pilot <a href='https://edu.nl/83qfg' target='_blank'>here</a>.<br><br>Feedback? Please let us know via <a href='mailto:meet@surf.nl'>meet@surf.nl</a>.",
+        "appDescription": "Check our <a href='https://wiki.surfnet.nl/x/C6faAQ' target='_blank'>manual</a> for tips and tricks and our <a href='https://wiki.surfnet.nl/x/RJTaAQ' target='_blank'>troubleshooter</a>.<br>Privacy is important to us! You can find the privacy statement for this pilot <a href='https://edu.nl/83qfg' target='_blank'>here</a>.<br><br>Feedback? Please let us know via <a href='mailto:meet@surf.nl'>meet@surf.nl</a>.",
         "appAbout": "SURF Videoconferencing pilot is based on <a href='https://jitsi.org/' target='_blank'>Jitsi Meet</a>: a 100% open source, fully encrypted video conference solution.",
         "audioVideoSwitch": {
             "audio": "Voice",
@@ -795,7 +795,7 @@
         "roomname": "Enter room name",
         "roomnameHint": "Enter the name or URL of the room you want to join. You may make a name up, just let the people you are meeting know it so that they enter the same name.",
         "sendFeedback": "Send feedback",
-        "subtitle": "Welcome to the SURF Videoconferencing pilot.<br/><br/>With this tool you can make video calls without fuss. So no software download, no addons, no license and your guests do not have to log in. Video calling works best with the Chromium web browsers: Chrome, MS Edge (from v75), Brave and Opera.",
+        "subtitle": "Welcome to the SURF Videoconferencing pilot.<br/><br/>We worked hard to improve. Help us get even better by filling in this <a class='survey-link' href='https://survey.surfnet.nl/index.php/776343?lang=nl' target='_blank'>short survey</a>.",
         "terms": "Terms",
         "title": "Security, privacy and easy to use.",
         "feedback": "Feedback? Please let us know via <a href='mailto:meet@surf.nl'>meet@surf.nl</a>.<br>SURF Videoconferencing pilot is based on JitsiMeet: a 100% open source,  video conference solution."

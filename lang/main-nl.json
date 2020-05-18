@@ -697,7 +697,7 @@
             "join": "Tik om deel te nemen",
             "roomname": "Naam van ruimte invoeren"
         },
-        "appDescription": "Check onze <a href='https://wiki.surfnet.nl/x/RJTaAQ' target='_blank'>probleemoplosser</a> of <a href='https://wiki.surfnet.nl/x/C6faAQ' target='_blank'>handleiding</a> voor tips en trucs.<br>Privacy vinden wij belangrijk! De privacy verklaring voor deze pilot kun je <a href='https://edu.nl/83qfg'>hier</a> vinden.<br><br>Feedback? We horen het graag via <a href='mailto:meet@surf.nl'>meet@surf.nl</a>.",
+        "appDescription": "Check onze <a href='https://wiki.surfnet.nl/x/C6faAQ' target='_blank'>handleiding</a> voor tips en trucs en onze <a href='https://wiki.surfnet.nl/x/RJTaAQ' target='_blank'>probleemoplosser</a>.<br>Privacy vinden wij belangrijk! De privacy verklaring voor deze pilot kun je <a href='https://edu.nl/83qfg' target='_blank'>hier</a> vinden.",
         "appAbout": "Pilot SURF Videobellen is gebaseerd op <a href='https://jitsi.org/' target='_blank'>Jitsi Meet</a>: een 100% open source, videoconference oplossing.",
         "audioVideoSwitch": {
             "audio": "Spraak",
@@ -720,7 +720,7 @@
         "sendFeedback": "Feedback sturen",
         "terms": "Voorwaarden",
         "title": "Veiligheid, Privacy en Gebruiksgemak.",
-        "subtitle": "Welkom bij de pilot SURF Videobellen.<br><br>Met deze tool kun je videobellen zonder poespas. Dus geen software downloaden, geen addons, geen licentie en je gasten hoeven ook niet in te loggen. Videobellen werkt het beste met de volgende webbrowsers: Chrome, MS Edge (vanaf v75), Brave en Opera."
+        "subtitle": "Welkom bij de pilot SURF Videobellen.<br><br>We hebben hard gewerkt aan verbeteringen. Help ons nog beter te worden via deze <a class='survey-link' href='https://survey.surfnet.nl/index.php/776343?lang=nl' target='_blank'>korte enquête</a>."
     },
     "lonelyMeetingExperience": {
         "button": "Anderen uitnodigen",
