@@ -6,6 +6,7 @@ import I18nextXHRBackend from 'i18next-xhr-backend';
 import COUNTRIES_RESOURCES from 'i18n-iso-countries/langs/en.json';
 import LANGUAGES_RESOURCES from '../../../../lang/languages.json';
 import MAIN_RESOURCES from '../../../../lang/main.json';
+import NL_RESOURCES from '../../../../lang/main-nl.json';
 
 import languageDetector from './languageDetector';
 
@@ -78,6 +79,12 @@ i18next.addResourceBundle(
     DEFAULT_LANGUAGE,
     'main',
     MAIN_RESOURCES,
+    /* deep */ true,
+    /* overwrite */ true);
+i18next.addResourceBundle(
+    LANGUAGES[1],
+    'main',
+    NL_RESOURCES,
     /* deep */ true,
     /* overwrite */ true);
 
