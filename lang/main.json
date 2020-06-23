@@ -795,9 +795,9 @@
         "roomname": "Enter room name",
         "roomnameHint": "Enter the name or URL of the room you want to join. You may make a name up, just let the people you are meeting know it so that they enter the same name.",
         "sendFeedback": "Send feedback",
-        "subtitle": "Welcome to the SURF Videoconferencing pilot.<br/><br/>We worked hard to improve. Help us get even better by filling in this <a class='survey-link' href='https://survey.surfnet.nl/index.php/776343?lang=nl' target='_blank'>short survey</a>.",
+        "subtitle": "<br/>Last Tuesday June 23rd the decision was made to stop with the pilot SURF Videobellen.<br/><br/>This means that SURF Videobellen will no longer be available as of July 1st, 2020.<br/><br/>In case you disagree, please contact your SURF contact person within your institution: <a href='https://www.surf.nl/cooperatie-surf/leden-van-surf'>https://www.surf.nl/cooperatie-surf/leden-van-surf</a>.",
         "terms": "Terms",
-        "title": "Security, privacy and easy to use.",
+        "title": "SURF Videobellen stops on July 1st, 2020.",
         "feedback": "Feedback? Please let us know via <a href='mailto:meet@surf.nl'>meet@surf.nl</a>.<br>SURF Videoconferencing pilot is based on JitsiMeet: a 100% open source,  video conference solution."
     },
     "lonelyMeetingExperience": {
