@@ -795,9 +795,9 @@
         "roomname": "Enter room name",
         "roomnameHint": "Enter the name or URL of the room you want to join. You may make a name up, just let the people you are meeting know it so that they enter the same name.",
         "sendFeedback": "Send feedback",
-        "subtitle": "<br/>Last Tuesday 23 June, the decision was made that further service development is cancelled for the pilot SURF Videobellen.<br/><br/>For the development of services, SURF always requests input from the institutions. The official process is via the SURF Portfolio Advisory Council (SPA). The members of this SPA represent their sector (Universities, HBO, UMC, MBO, and research) and coordinate the process.<br/><br/>Last Tuesday, 23 June, the SPA stated that they do not see an added value in SURF Videobellen. This means there is no need for further service development, and that pilot SURF Videobellen will no longer be available from July 1st, 2020.",
+        "subtitle": "Welcome to the SURF Videoconferencing pilot.",
         "terms": "Terms",
-        "title": "SURF Videobellen stops on July 1st, 2020.",
+        "title": "Security, privacy and easy to use.",
         "feedback": "Feedback? Please let us know via <a href='mailto:meet@surf.nl'>meet@surf.nl</a>.<br>SURF Videoconferencing pilot is based on JitsiMeet: a 100% open source,  video conference solution."
     },
     "lonelyMeetingExperience": {
