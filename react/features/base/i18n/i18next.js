@@ -5,8 +5,8 @@ import i18next from 'i18next';
 import I18nextXHRBackend from 'i18next-xhr-backend';
 
 import LANGUAGES_RESOURCES from '../../../../lang/languages.json';
-import MAIN_RESOURCES from '../../../../lang/main.json';
 import NL_RESOURCES from '../../../../lang/main-nl.json';
+import MAIN_RESOURCES from '../../../../lang/main.json';
 
 import languageDetector from './languageDetector';
 

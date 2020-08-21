@@ -6,8 +6,6 @@ var interfaceConfig = {
     AUDIO_LEVEL_PRIMARY_COLOR: 'rgba(255,255,255,0.4)',
     AUDIO_LEVEL_SECONDARY_COLOR: 'rgba(255,255,255,0.2)',
 
-    BRAND_WATERMARK_LINK: '',
-
     /**
      * A UX mode where the last screen share participant is automatically
      * pinned. Valid values are the string "remote-only" so remote participants
@@ -17,6 +15,8 @@ var interfaceConfig = {
      * Note: this mode is experimental and subject to breakage.
      */
     AUTO_PIN_LATEST_SCREEN_SHARE: 'remote-only',
+
+    BRAND_WATERMARK_LINK: '',
 
     CLOSE_PAGE_GUEST_HINT: false, // A html text to be shown to guests on the close page, false disables it
     /**
@@ -37,12 +37,6 @@ var interfaceConfig = {
      * @type {number}
      */
     CONNECTION_INDICATOR_AUTO_HIDE_TIMEOUT: 5000,
-
-    // Determines how the video would fit the screen. 'both' would fit the whole
-    // screen, 'height' would fit the original video height to the height of the
-    // screen, 'width' would fit the original video width to the width of the
-    // screen respecting ratio.
-    VIDEO_LAYOUT_FIT: 'both',
 
     /**
      * If true, hides the connection indicators completely.
@@ -144,10 +138,6 @@ var interfaceConfig = {
     // unsupported are considered suboptimal. Valid values are:
     // chrome, chromium, edge, electron, firefox, nwjs, opera, safari
     OPTIMAL_BROWSERS: [ 'chrome', 'chromium', 'firefox', 'nwjs', 'electron', 'edge', 'opera' ],
-
-    // Browsers, in addition to those which do not fully support WebRTC, that
-    // are not supported and should show the unsupported browser page.
-    UNSUPPORTED_BROWSERS: [ ],
 
     POLICY_LOGO: null,
     PROVIDER_NAME: 'Jitsi',
