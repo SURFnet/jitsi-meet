@@ -162,14 +162,14 @@ class Watermarks extends Component<Props, State> {
      * @returns {ReactElement|null}
      */
     _renderJitsiWatermark() {
-        const {
-            _logoLink,
-            _logoUrl,
-            _showJitsiWatermark
-        } = this.props;
         let reactElement = null;
+        const {
+            _customLogoUrl,
+            _customLogoLink
+        } = this.props;
 
-        if (_showJitsiWatermark) {
+        if (this._canDisplayJitsiWatermark()) {
+            const link = _customLogoLink || this.state.jitsiWatermarkLink;
             const style = {
                 backgroundImage: `url(${_customLogoUrl || interfaceConfig.DEFAULT_LOGO_URL})`
             };
@@ -178,7 +178,7 @@ class Watermarks extends Component<Props, State> {
                 className = 'watermark leftwatermark'
                 style = { style } />);
 
-            if (_logoLink) {
+            if (link) {
                 reactElement = (
                     <a
                         href = { link }
