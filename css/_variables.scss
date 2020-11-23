@@ -166,8 +166,8 @@ $unsupportedDesktopBrowserTextFontSize: 21px;
 $watermarkWidth: 262.5px;
 $watermarkHeight: 190.25px;
 
-$welcomePageWatermarkWidth: 186px;
-$welcomePageWatermarkHeight: 74px;
+$welcomePageWatermarkWidth: $watermarkWidth;
+$welcomePageWatermarkHeight: $watermarkHeight;
 
 /**
  * Welcome page variables.
