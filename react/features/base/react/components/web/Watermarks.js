@@ -84,13 +84,7 @@ class Watermarks extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
 
-        let showBrandWatermark;
-
-        if (interfaceConfig.filmStripOnly) {
-            showBrandWatermark = false;
-        } else {
-            showBrandWatermark = interfaceConfig.SHOW_BRAND_WATERMARK;
-        }
+        const showBrandWatermark = interfaceConfig.SHOW_BRAND_WATERMARK;
 
         this.state = {
             brandWatermarkLink:
@@ -144,8 +138,7 @@ class Watermarks extends Component<Props, State> {
                 reactElement = (
                     <a
                         href = { brandWatermarkLink }
-                        rel = 'noopener noreferrer'
-                        target = '_blank'>
+                        target = '_new'>
                         { reactElement }
                     </a>
                 );
@@ -162,28 +155,29 @@ class Watermarks extends Component<Props, State> {
      * @returns {ReactElement|null}
      */
     _renderJitsiWatermark() {
-        let reactElement = null;
         const {
-            _customLogoUrl,
-            _customLogoLink
+            _logoLink,
+            _logoUrl,
+            _showJitsiWatermark
         } = this.props;
+        let reactElement = null;
 
-        if (this._canDisplayJitsiWatermark()) {
-            const link = _customLogoLink || this.state.jitsiWatermarkLink;
+        if (_showJitsiWatermark) {
             const style = {
-                backgroundImage: `url(${_customLogoUrl || interfaceConfig.DEFAULT_LOGO_URL})`
+                backgroundImage: `url(${_logoUrl})`,
+                maxWidth: 140,
+                maxHeight: 70
             };
 
             reactElement = (<div
                 className = 'watermark leftwatermark'
                 style = { style } />);
 
-            if (link) {
+            if (_logoLink) {
                 reactElement = (
                     <a
-                        href = { link }
-                        rel = 'noopener noreferrer'
-                        target = '_blank'>
+                        href = { _logoLink }
+                        target = '_new'>
                         { reactElement }
                     </a>
                 );
@@ -207,8 +201,7 @@ class Watermarks extends Component<Props, State> {
                 <a
                     className = 'poweredby'
                     href = 'http://jitsi.org'
-                    rel = 'noopener noreferrer'
-                    target = '_blank'>
+                    target = '_new'>
                     <span>{ t('poweredby') } jitsi.org</span>
                 </a>
             );
@@ -226,7 +219,6 @@ class Watermarks extends Component<Props, State> {
  * @returns {Props}
  */
 function _mapStateToProps(state, ownProps) {
-    const { isGuest } = state['features/base/jwt'];
     const {
         customizationReady,
         customizationFailed,
@@ -239,13 +231,11 @@ function _mapStateToProps(state, ownProps) {
     const {
         DEFAULT_LOGO_URL,
         JITSI_WATERMARK_LINK,
-        SHOW_JITSI_WATERMARK,
-        SHOW_JITSI_WATERMARK_FOR_GUESTS,
-        filmStripOnly
+        SHOW_JITSI_WATERMARK
     } = interfaceConfig;
-    let _showJitsiWatermark = (!filmStripOnly
-          && (customizationReady && !customizationFailed)
-          && (SHOW_JITSI_WATERMARK || (isGuest && SHOW_JITSI_WATERMARK_FOR_GUESTS)))
+    let _showJitsiWatermark = (
+        customizationReady && !customizationFailed
+        && SHOW_JITSI_WATERMARK)
     || !isValidRoom;
     let _logoUrl = logoImageUrl;
     let _logoLink = logoClickUrl;
