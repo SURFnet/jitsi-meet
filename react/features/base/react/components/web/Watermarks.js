@@ -138,7 +138,8 @@ class Watermarks extends Component<Props, State> {
                 reactElement = (
                     <a
                         href = { brandWatermarkLink }
-                        target = '_new'>
+                        rel = 'noopener noreferrer'
+                        target = '_blank'>
                         { reactElement }
                     </a>
                 );
@@ -177,7 +178,8 @@ class Watermarks extends Component<Props, State> {
                 reactElement = (
                     <a
                         href = { _logoLink }
-                        target = '_new'>
+                        rel = 'noopener noreferrer'
+                        target = '_blank'>
                         { reactElement }
                     </a>
                 );
@@ -201,7 +203,8 @@ class Watermarks extends Component<Props, State> {
                 <a
                     className = 'poweredby'
                     href = 'http://jitsi.org'
-                    target = '_new'>
+                    rel = 'noopener noreferrer'
+                    target = '_blank'>
                     <span>{ t('poweredby') } jitsi.org</span>
                 </a>
             );
