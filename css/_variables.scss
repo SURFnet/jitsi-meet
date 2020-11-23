@@ -166,6 +166,9 @@ $unsupportedDesktopBrowserTextFontSize: 21px;
 $watermarkWidth: 262.5px;
 $watermarkHeight: 190.25px;
 
+$welcomePageWatermarkWidth: 186px;
+$welcomePageWatermarkHeight: 74px;
+
 /**
  * Welcome page variables.
  */
@@ -180,9 +183,12 @@ $welcomePageHeaderBackgroundPosition: none;
 $welcomePageHeaderBackgroundRepeat: none;
 $welcomePageHeaderBackgroundSize: none;
 $welcomePageHeaderPaddingBottom: 0px;
+$welcomePageHeaderMinHeight: fit-content;
 
 $welcomePageHeaderTextMarginTop: 35px;
 $welcomePageHeaderTextMarginBottom: 35px;
+$welcomePageHeaderTextDisplay: flex;
+$welcomePageHeaderTextWidth: 700px;
 
 $welcomePageHeaderTextTitleMarginBottom: 0px;
 $welcomePageHeaderTextTitleFontSize: 1.6rem;
@@ -197,6 +203,7 @@ $welcomePageHeaderTextDescriptionLineHeight: 1.18;
 $welcomePageHeaderTextDescriptionMarginBottom: 20px;
 $welcomePageHeaderTextDescriptionAlignSelf: inherit;
 
+$welcomePageEnterRoomDisplay: flex;
 $welcomePageEnterRoomWidth: 680px;
 $welcomePageEnterRoomPadding: 25px 30px;
 $welcomePageEnterRoomBorderRadius: 0px;
@@ -271,3 +278,9 @@ $chromeExtensionBannerTop: 80px;
 $chromeExtensionBannerRight: 16px;
 $chromeExtensionBannerTopInMeeting: 10px;
 $chromeExtensionBannerRightInMeeeting: 10px;
+
+/**
+* media type thresholds
+*/
+$smallScreen: 700px;
+$verySmallScreen: 500px;
