@@ -47,7 +47,7 @@ var interfaceConfig = {
 
     DEFAULT_BACKGROUND: '#474747',
     DEFAULT_LOCAL_DISPLAY_NAME: 'me',
-    DEFAULT_LOGO_URL: 'images/SURFmeet-logo-small@2x.png',
+    DEFAULT_LOGO_URL: 'images/videobellen-stopt@2x.png',
     DEFAULT_REMOTE_DISPLAY_NAME: 'Fellow Jitster',
     DEFAULT_WELCOME_PAGE_LOGO_URL: 'images/SURFmeet-logo-small@2x.png',
 
