@@ -871,7 +871,7 @@
             "join": "Tap to join",
             "roomname": "Enter room name"
         },
-        "appDescription": "Check our <a href='https://wiki.surfnet.nl/x/C6faAQ' target='_blank'>manual</a> for tips and tricks and our <a href='https://wiki.surfnet.nl/x/RJTaAQ' target='_blank'>troubleshooter</a>.<br>Privacy is important to us! You can find the privacy statement for this pilot <a href='https://edu.nl/83qfg' target='_blank'>here</a>.<br><br>Feedback? Please let us know via <a href='mailto:meet@surf.nl'>meet@surf.nl</a>.",
+        "appDescription": "The SURF Videoconferencing pilot stops as of 1-1-2021. Thank you for using it and providing us with your feedback.<br>For alternatives for videoconferencing we refer you to your own institution.<br>We really enjoyed setting up this pilot and are grateful for positive feedback on this pilot.",
         "appAbout": "SURF Videoconferencing pilot is based on <a href='https://jitsi.org/' target='_blank'>Jitsi Meet</a>: a 100% open source, fully encrypted video conference solution.",
         "audioVideoSwitch": {
             "audio": "Voice",
