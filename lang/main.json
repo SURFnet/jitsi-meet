@@ -871,7 +871,7 @@
             "join": "Tap to join",
             "roomname": "Enter room name"
         },
-        "appDescription": "The SURF Videoconferencing pilot stops as of 1-1-2021. Thank you for using it and providing us with your feedback.<br>For alternatives for videoconferencing we refer you to your own institution.<br>We really enjoyed setting up this pilot and are grateful for positive feedback on this pilot.",
+        "appDescription": " ",
         "appAbout": "SURF Videoconferencing pilot is based on <a href='https://jitsi.org/' target='_blank'>Jitsi Meet</a>: a 100% open source, fully encrypted video conference solution.",
         "audioVideoSwitch": {
             "audio": "Voice",
@@ -896,9 +896,9 @@
         "roomname": "Enter room name",
         "roomnameHint": "Enter the name or URL of the room you want to join. You may make a name up, just let the people you are meeting know it so that they enter the same name.",
         "sendFeedback": "Send feedback",
-        "subtitle": "Welcome to the SURF Videoconferencing pilot.",
+        "subtitle": "Thank you for using it and providing us with your feedback.<br>For alternatives for videoconferencing we refer you to your own institution.<br>We really enjoyed setting up this pilot and are grateful for positive feedback on this pilot.",
         "terms": "Terms",
-        "title": "Security, privacy and easy to use.",
+        "title": "The SURF Videoconferencing pilot stops as of 1-1-2021.",
         "feedback": "Feedback? Please let us know via <a href='mailto:meet@surf.nl'>meet@surf.nl</a>.<br>SURF Videoconferencing pilot is based on JitsiMeet: a 100% open source,  video conference solution."
     },
     "lonelyMeetingExperience": {

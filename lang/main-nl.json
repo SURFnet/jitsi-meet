@@ -832,7 +832,7 @@
             "join": "Tik om deel te nemen",
             "roomname": "Voer naam van ruimte in"
         },
-        "appDescription": "De pilot SURF Videobellen stopt per 1-1-2021. Dank voor het gebruik en jullie feedback.<br>Voor alternatieven voor videobellen verwijzen we je naar je eigen instelling.<br>We hebben met veel plezier deze pilot opgezet en zijn dankbaar voor de warme reacties op deze pilot.",
+        "appDescription": " ",
         "appAbout": "Pilot SURF Videobellen is gebaseerd op <a href='https://jitsi.org/' target='_blank'>Jitsi Meet</a>: een 100% open source, videoconference oplossing.",
         "audioVideoSwitch": {
             "audio": "Spraak",
@@ -858,8 +858,8 @@
         "roomnameHint": "Voer de naam of URL in van de ruimte die u wilt betreden. U kunt een naam verzinnen, maar laat deze wel weten aan de andere deelnemers, zodat zij dezelfde naam invoeren.",
         "sendFeedback": "Feedback versturen",
         "terms": "Voorwaarden",
-        "title": "Veiligheid, Privacy en Gebruiksgemak.",
-        "subtitle": "Welkom bij de pilot SURF Videobellen."
+        "title": "De pilot SURF Videobellen stopt per 1-1-2021.",
+        "subtitle": "Dank voor het gebruik en jullie feedback.<br>Voor alternatieven voor videobellen verwijzen we je naar je eigen instelling.<br>We hebben met veel plezier deze pilot opgezet en zijn dankbaar voor de warme reacties op deze pilot."
     },
     "lonelyMeetingExperience": {
         "button": "Anderen uitnodigen",
